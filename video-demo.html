@@ -1,44 +1,6 @@
 <!DOCTYPE html>
 
 <head>
-  <script>// Autoplay handling
-    window.addEventListener("load", () => {
-      video.muted = true;
-      video.play();
-      muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
-    });
-
-    const video = document.getElementById("myVideo");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-    const muteBtn = document.getElementById("muteBtn");
-
-    playPauseBtn.addEventListener("click", () => {
-      if (video.paused || video.ended) {
-        video.play();
-        playPauseBtn.textContent = "Pause";
-      } else {
-        video.pause();
-        playPauseBtn.textContent = "Play";
-      }
-    });
-
-    muteBtn.addEventListener("click", () => {
-      video.muted = !video.muted;
-      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
-    });
-
-    video.addEventListener("play", () => {
-      playPauseBtn.textContent = "Pause";
-    });
-
-    video.addEventListener("pause", () => {
-      playPauseBtn.textContent = "Play";
-    });
-
-    video.addEventListener("volumechange", () => {
-      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
-    });
-  </script>
   <style>
     .videobox {
       margin: 15px 0;
@@ -436,7 +398,7 @@
                   <div class="header-image" style="">
                     <div class="image-promoted-label" style="display: none;">Ad</div>
                     <div class="video-container">
-                      <video id="myVideo" autoplay muted loop playsinline controls>
+                      <video id="myVideo" autoplay muted loop playsinline>
                         <source src="https://brenopolanski.github.io/html5-video-webvtt-example/MIB2.mp4"
                           type="video/mp4">
                         <track src="https://rasheedsulaiman.github.io/repository/sample.vtt" kind="caption" srclang="en"
@@ -586,6 +548,44 @@
       <a href="/brand" class="secondary-link light-link promoted-label">Sponsored Ad</a>
     </div>
   </div>
+  <script>// Autoplay handling
+    window.addEventListener("load", () => {
+      video.muted = true;
+      video.play();
+      muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+    });
+
+    const video = document.getElementById("myVideo");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const muteBtn = document.getElementById("muteBtn");
+
+    playPauseBtn.addEventListener("click", () => {
+      if (video.paused || video.ended) {
+        video.play();
+        playPauseBtn.textContent = "Pause";
+      } else {
+        video.pause();
+        playPauseBtn.textContent = "Play";
+      }
+    });
+
+    muteBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
+    });
+
+    video.addEventListener("play", () => {
+      playPauseBtn.textContent = "Pause";
+    });
+
+    video.addEventListener("pause", () => {
+      playPauseBtn.textContent = "Play";
+    });
+
+    video.addEventListener("volumechange", () => {
+      muteBtn.textContent = video.muted ? "Unmute" : "Mute";
+    });
+  </script>
 </body>
 
 </html>
