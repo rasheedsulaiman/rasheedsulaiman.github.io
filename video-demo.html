@@ -34,9 +34,14 @@
         });
         
         // Ensure the button states are set correctly on load
-        video.muted = true;
-        video.play();
-        muteBtn.textContent = video.muted ? 'Unmute' : 'Mute';
+        window.addEventListener("load", () => {
+          video.muted = true;
+          video.play().catch(error => {
+              console.log("Autoplay was prevented:", error);
+              // Handle the error, e.g., display a play button
+          });
+          muteBtn.textContent = "Unmute";
+        });
       });
     </script>
     <style>
