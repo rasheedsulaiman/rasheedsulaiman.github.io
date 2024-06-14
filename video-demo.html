@@ -389,15 +389,15 @@
           const playPauseBtn = document.getElementById("playPauseBtn");
           const muteBtn = document.getElementById("muteBtn");
 
-          playPauseBtn.addEventListener("click", () => {
-              if (video.paused || video.ended) {
-                  video.play();
-                  playPauseBtn.textContent = "Pause";
-              } else {
-                  video.pause();
-                  playPauseBtn.textContent = "Play";
-              }
+          const playVideo = () => {
+        setTimeout(() => {
+          video.play().catch(error => {
+            console.log("Autoplay was prevented:", error);
+            // Show a play button or handle the autoplay prevention
+            playPauseBtn.style.display = "block";
           });
+        }, 3000); // Delay of 3 seconds
+      };
 
           muteBtn.addEventListener("click", () => {
               video.muted = !video.muted;
@@ -418,10 +418,7 @@
 
           // Ensure the button states are set correctly on load
           video.muted = true;
-          video.play().catch(error => {
-              console.log("Autoplay was prevented:", error);
-              // Handle the error, e.g., display a play button
-          });
+          video.play();
           muteBtn.textContent = "Mute";
       });
   </script>
