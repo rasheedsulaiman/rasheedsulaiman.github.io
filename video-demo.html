@@ -41,7 +41,7 @@
             position: relative;
             display: inline-block;
       }
-      
+
       .video-link a {
           display: block;
           position: absolute;
@@ -417,6 +417,17 @@
           const playPauseBtn = document.getElementById("playPauseBtn");
           const muteBtn = document.getElementById("muteBtn");
 
+          // Fetch the video content and create a blob URL
+          fetch("https://brenopolanski.github.io/html5-video-webvtt-example/MIB2.mp4")
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    video.src = url;
+                })
+                .catch(error => {
+                    console.error('Error fetching the video:', error);
+                });
+
           playPauseBtn.addEventListener("click", () => {
               if (video.paused || video.ended) {
                   video.play();
@@ -446,10 +457,6 @@
 
           // Ensure the button states are set correctly on load
           video.muted = true;
-          video.play().catch(error => {
-              console.log("Autoplay was prevented:", error);
-              // Handle the error, e.g., display a play button
-          });
           muteBtn.textContent = "Mute";
       });
   </script>
@@ -468,7 +475,7 @@
                       <div class="image-promoted-label" style="display: none;">Ad</div>
                       <div class="video-container video-link">
                         <video id="myVideo" autoplay muted loop playsinline>
-                          <source src="https://brenopolanski.github.io/html5-video-webvtt-example/MIB2.mp4" type="video/mp4">
+                          <!-- The source will be set dynamically by JavaScript -->
                           <track src="https://rasheedsulaiman.github.io/repository/sample.vtt" kind="captions" srclang="pt" label="Portuguese" default>
                           Your browser does not support the video tag.
                         </video>
