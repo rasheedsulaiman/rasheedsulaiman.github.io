@@ -28,12 +28,28 @@
         left: 10px;
         display: flex;
         gap: 10px;
+        z-index: 2;
       }
 
       .custom-controls button {
         padding: 10px;
         font-size: 16px;
         cursor: pointer;
+      }
+
+      .video-link {
+            position: relative;
+            display: inline-block;
+      }
+      
+      .video-link a {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
       }
 
       .header-image:hover {
@@ -450,12 +466,13 @@
                   <div class="content-layout">
                     <div class="header-image">
                       <div class="image-promoted-label" style="display: none;">Ad</div>
-                      <div class="video-container">
+                      <div class="video-container video-link">
                         <video id="myVideo" autoplay muted loop playsinline>
                           <source src="https://brenopolanski.github.io/html5-video-webvtt-example/MIB2.mp4" type="video/mp4">
                           <track src="https://rasheedsulaiman.github.io/repository/sample.vtt" kind="captions" srclang="pt" label="Portuguese" default>
                           Your browser does not support the video tag.
                         </video>
+                        <a href="https://google.com" target="_blank"></a>
                         <div class="custom-controls">
                           <button id="playPauseBtn">Play</button>
                           <button id="muteBtn">Mute</button>
