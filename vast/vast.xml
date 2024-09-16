@@ -3,7 +3,7 @@
     <InLine>
       <AdSystem>MyAdServer</AdSystem>
       <AdTitle>Sample Video Ad</AdTitle>
-      <Impression><![CDATA[https://example.com/impression]]></Impression>
+      <!-- <Impression><![CDATA[https://example.com/impression]]></Impression> -->
 
       <Creatives>
         <Creative>
@@ -17,7 +17,7 @@
                 apiFramework="VPAID" 
                 width="640" 
                 height="360">
-                <![CDATA[https://example.com/vpaid-ad.js]]>
+                <![CDATA[https://rasheedsulaiman.github.io/vast/vpaid.js]]>
               </MediaFile>
 
               <!-- MP4 Video Ad -->
@@ -27,24 +27,24 @@
                 width="640" 
                 height="360" 
                 bitrate="500">
-                <![CDATA[test-ad.mp4]]>
+                <![CDATA[https://rasheedsulaiman.github.io/vast/test-ad.mp4]]>
               </MediaFile>
             </MediaFiles>
 
-            <TrackingEvents>
+            <!-- <TrackingEvents>
               <Tracking event="start"><![CDATA[https://example.com/tracking/start]]></Tracking>
               <Tracking event="complete"><![CDATA[https://example.com/tracking/complete]]></Tracking>
-            </TrackingEvents>
+            </TrackingEvents> -->
 
-            <VideoClicks>
+            <!-- <VideoClicks>
               <ClickThrough><![CDATA[https://example.com/clickthrough]]></ClickThrough>
               <ClickTracking><![CDATA[https://example.com/clicktracking]]></ClickTracking>
-            </VideoClicks>
+            </VideoClicks> -->
           </Linear>
         </Creative>
       </Creatives>
 
-      <Error><![CDATA[https://example.com/error]]></Error>
+      <!-- <Error><![CDATA[https://example.com/error]]></Error> -->
     </InLine>
   </Ad>
 </VAST>
