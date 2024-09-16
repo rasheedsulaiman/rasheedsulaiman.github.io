@@ -1,0 +1,50 @@
+<VAST version="3.0">
+  <Ad id="12345">
+    <InLine>
+      <AdSystem>MyAdServer</AdSystem>
+      <AdTitle>Sample Video Ad</AdTitle>
+      <Impression><![CDATA[https://example.com/impression]]></Impression>
+
+      <Creatives>
+        <Creative>
+          <Linear>
+            <Duration>00:01:00</Duration>
+            <MediaFiles>
+              <!-- VPAID JS Ad -->
+              <MediaFile 
+                delivery="progressive" 
+                type="application/javascript" 
+                apiFramework="VPAID" 
+                width="640" 
+                height="360">
+                <![CDATA[https://example.com/vpaid-ad.js]]>
+              </MediaFile>
+
+              <!-- MP4 Video Ad -->
+              <MediaFile 
+                delivery="progressive" 
+                type="video/mp4" 
+                width="640" 
+                height="360" 
+                bitrate="500">
+                <![CDATA[test-ad.mp4]]>
+              </MediaFile>
+            </MediaFiles>
+
+            <TrackingEvents>
+              <Tracking event="start"><![CDATA[https://example.com/tracking/start]]></Tracking>
+              <Tracking event="complete"><![CDATA[https://example.com/tracking/complete]]></Tracking>
+            </TrackingEvents>
+
+            <VideoClicks>
+              <ClickThrough><![CDATA[https://example.com/clickthrough]]></ClickThrough>
+              <ClickTracking><![CDATA[https://example.com/clicktracking]]></ClickTracking>
+            </VideoClicks>
+          </Linear>
+        </Creative>
+      </Creatives>
+
+      <Error><![CDATA[https://example.com/error]]></Error>
+    </InLine>
+  </Ad>
+</VAST>
