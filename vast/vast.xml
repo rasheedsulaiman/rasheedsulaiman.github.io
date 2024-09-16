@@ -1,4 +1,4 @@
- <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd" version="3.0">
+<VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd" version="3.0">
     <Ad id="1234567">
         <InLine>
             <AdSystem>CustomAds</AdSystem>
@@ -9,7 +9,7 @@
                     <Linear>
                         <Duration>00:00:00</Duration>
                         <MediaFiles>
-                          <MediaFile delivery="progressive" apiFramework="VPAID" type="application/javascript" width="640" height="360">https://rasheedsulaiman.github.io/vast/vpaid-ld.js</MediaFile>
+                          <MediaFile delivery="progressive" apiFramework="VPAID" type="application/javascript" width="300" height="200">https://cdn1.customads.co/embeds/rac_14934589701322086.js</MediaFile>
                         </MediaFiles>
                     </Linear>
                 </Creative>
