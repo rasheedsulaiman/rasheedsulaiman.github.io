@@ -24,21 +24,19 @@ VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrat
   console.log("initAd called with width:", width, "height:", height, "viewMode:", viewMode, "desiredBitrate:", desiredBitrate);
   this.attributes.adWidth = width;
   this.attributes.adHeight = height;
-  this.attributes.adDuration = 30; // Example duration
 
-  // Create video element
+  // Create and append video element
   this.videoElement = document.createElement("video");
   this.videoElement.width = width;
   this.videoElement.height = height;
   this.videoElement.src = "https://rasheedsulaiman.github.io/vast/test-ad.mp4"; // Replace with your ad video URL
   this.videoElement.controls = true;
-
-  // Append video element to the body
   document.body.appendChild(this.videoElement);
 
   this.dispatchEvent("AdLoaded");
+
+  // Safely check if callback is a function before calling it
   if (typeof callback === "function") {
-    console.log("initAd callback is a function");
     callback();
   } else {
     console.error("initAd callback is not a function");
@@ -51,8 +49,9 @@ VPAIDCreative.prototype.startAd = function(callback) {
     this.videoElement.play();
   }
   this.dispatchEvent("AdStarted");
+
+  // Safely check if callback is a function before calling it
   if (typeof callback === "function") {
-    console.log("startAd callback is a function");
     callback();
   } else {
     console.error("startAd callback is not a function");
@@ -87,15 +86,22 @@ VPAIDCreative.prototype.skipAd = function(callback) {
 
 VPAIDCreative.prototype.resizeAd = function(width, height, viewMode, callback) {
   console.log("resizeAd called with width:", width, "height:", height, "viewMode:", viewMode);
+  
+  // Update ad dimensions
   this.attributes.adWidth = width;
   this.attributes.adHeight = height;
+
+  // Update the video element dimensions if it exists
   if (this.videoElement) {
     this.videoElement.width = width;
     this.videoElement.height = height;
   }
+
+  // Dispatch the AdSizeChange event
   this.dispatchEvent("AdSizeChange");
+
+  // Safely check if callback is a function before calling it
   if (typeof callback === "function") {
-    console.log("resizeAd callback is a function");
     callback();
   } else {
     console.error("resizeAd callback is not a function");
@@ -104,12 +110,17 @@ VPAIDCreative.prototype.resizeAd = function(width, height, viewMode, callback) {
 
 VPAIDCreative.prototype.pauseAd = function(callback) {
   console.log("pauseAd called");
+
+  // Pause the video element if it exists
   if (this.videoElement) {
     this.videoElement.pause();
   }
+
+  // Dispatch the AdPaused event
   this.dispatchEvent("AdPaused");
+
+  // Safely check if callback is a function before calling it
   if (typeof callback === "function") {
-    console.log("pauseAd callback is a function");
     callback();
   } else {
     console.error("pauseAd callback is not a function");
