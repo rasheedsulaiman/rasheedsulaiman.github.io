@@ -17,6 +17,7 @@ var VPAIDCreative = function() {
 
 VPAIDCreative.prototype.handshakeVersion = function(version, callback) {
   console.log('handshakeVersion called with version:', version);
+  console.log('handshakeVersion callback type:', typeof callback);
   if (typeof callback === 'function') {
     console.log('handshakeVersion callback is a function');
     callback('2.0');
