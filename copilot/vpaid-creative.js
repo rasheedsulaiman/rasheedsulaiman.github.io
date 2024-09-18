@@ -9,7 +9,8 @@ var VPAIDCreative = function() {
     adRemainingTime: 0,
     adDuration: 30, // Example duration
     adVolume: 1.0,
-    adIcons: null // Initialize adIcons attribute
+    adIcons: null, // Initialize adIcons attribute
+    adLinear: true // Initialize adLinear attribute
   };
   this.videoElement = null;
 };
@@ -156,6 +157,11 @@ VPAIDCreative.prototype.getAdWidth = function() {
 // Implement the getAdHeight method
 VPAIDCreative.prototype.getAdHeight = function() {
   return this.attributes.adHeight;
+};
+
+// Implement the getAdLinear method
+VPAIDCreative.prototype.getAdLinear = function() {
+  return this.attributes.adLinear;
 };
 
 // Expose the VPAID creative to the global scope
