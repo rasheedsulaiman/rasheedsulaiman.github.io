@@ -111,6 +111,11 @@ VPAIDCreative.prototype.dispatchEvent = function(eventName) {
   }
 };
 
+// Implement the getAdIcons method
+VPAIDCreative.prototype.getAdIcons = function() {
+  return this.attributes.adIcons;
+};
+
 // Expose the VPAID creative to the global scope
 window.getVPAIDAd = function() {
   return new VPAIDCreative();
