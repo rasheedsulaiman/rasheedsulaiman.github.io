@@ -1,19 +1,39 @@
- <VAST xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vast.xsd" version="3.0">
-    <Ad id="1234567">
-        <InLine>
-            <AdSystem>CustomAds</AdSystem>
-            <AdTitle>CustomAds</AdTitle>
-            <Description>CustomAds</Description>
-            <Creatives>
-                <Creative sequence="1">
-                    <Linear>
-                        <Duration>00:00:00</Duration>
-                        <MediaFiles>
-                          <MediaFile delivery="progressive" apiFramework="VPAID" type="application/javascript" width="640" height="360">https://rasheedsulaiman.github.io/vast/vpaid.js</MediaFile>
-                        </MediaFiles>
-                    </Linear>
-                </Creative>
-            </Creatives>
-        </InLine>
-    </Ad>
+<VAST version="3.0">
+  <Ad id="12345">
+    <InLine>
+      <AdSystem>MyAdServer</AdSystem>
+      <AdTitle>Sample Video Ad</AdTitle>
+
+      <Creatives>
+        <Creative>
+          <Linear>
+            <Duration>00:01:00</Duration>
+            <MediaFiles>
+              <!-- VPAID JS Ad -->
+              <MediaFile 
+                delivery="progressive" 
+                type="application/javascript" 
+                apiFramework="VPAID" 
+                width="640" 
+                height="360">
+                <![CDATA[https://rasheedsulaiman.github.io/vast/vpaid.js]]>
+              </MediaFile>
+
+              <!-- MP4 Video Ad -->
+              <MediaFile 
+                delivery="progressive" 
+                type="video/mp4" 
+                width="640" 
+                height="360" 
+                bitrate="500">
+                <![CDATA[https://rasheedsulaiman.github.io/vast/test-ad.mp4]]>
+              </MediaFile>
+            </MediaFiles>
+          </Linear>
+        </Creative>
+      </Creatives>
+
+      <!-- <Error><![CDATA[https://example.com/error]]></Error> -->
+    </InLine>
+  </Ad>
 </VAST>
