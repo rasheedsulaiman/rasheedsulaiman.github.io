@@ -122,6 +122,32 @@ VPAIDCreative.prototype.getAdDuration = function() {
   return this.attributes.adDuration;
 };
 
+// Implement the getAdExpanded method
+VPAIDCreative.prototype.getAdExpanded = function() {
+  return this.attributes.adExpanded;
+};
+
+// Implement the getAdSkippableState method
+VPAIDCreative.prototype.getAdSkippableState = function() {
+  return this.attributes.adSkippableState;
+};
+
+// Implement the getAdRemainingTime method
+VPAIDCreative.prototype.getAdRemainingTime = function() {
+  return this.attributes.adRemainingTime;
+};
+
+// Implement the getAdVolume method
+VPAIDCreative.prototype.getAdVolume = function() {
+  return this.attributes.adVolume;
+};
+
+// Implement the setAdVolume method
+VPAIDCreative.prototype.setAdVolume = function(volume) {
+  this.attributes.adVolume = volume;
+  this.dispatchEvent('AdVolumeChange');
+};
+
 // Expose the VPAID creative to the global scope
 window.getVPAIDAd = function() {
   return new VPAIDCreative();
