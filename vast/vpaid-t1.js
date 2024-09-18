@@ -1,121 +1,232 @@
-(function() {
-  var VPAIDAd = function() {
-      this.eventsCallbacks = {};
-      this.adDuration = 30; // Example duration in seconds
-      this.adVolume = 1.0;  // Default volume (100%)
-      this.startTime = 0;
-      this.isStarted = false;
-  };
+// https://gist.github.com/afuggini/3afe51168ab0c416c97876e2e15909b0
+// This class is meant to be part of the video player that interacts with the Ad.
+// It takes the VPAID creative as a parameter in its contructor.
+var VPAIDWrapper = function (VPAIDCreative) {
+  this._creative = VPAIDCreative
+  if (!this.checkVPAIDInterface(VPAIDCreative)) {
+    //The VPAIDCreative doesn't conform to the VPAID spec
+    console.error('VPAIDCreative doesn\'t conform to the VPAID spec')
+    return
+  }
+  this.setCallbacksForCreative()
+}
+VPAIDWrapper.prototype.checkVPAIDInterface = function (VPAIDCreative) {
+  if (VPAIDCreative.handshakeVersion && typeof VPAIDCreative.handshakeVersion == 'function' &&
+    VPAIDCreative.initAd && typeof VPAIDCreative.initAd == 'function' &&
+    VPAIDCreative.startAd && typeof VPAIDCreative.startAd == 'function' &&
+    VPAIDCreative.stopAd && typeof VPAIDCreative.stopAd == 'function' &&
+    VPAIDCreative.skipAd && typeof VPAIDCreative.skipAd == 'function' &&
+    VPAIDCreative.resizeAd && typeof VPAIDCreative.resizeAd == 'function' &&
+    VPAIDCreative.pauseAd && typeof VPAIDCreative.pauseAd == 'function' &&
+    VPAIDCreative.resumeAd && typeof VPAIDCreative.resumeAd == 'function' &&
+    VPAIDCreative.expandAd && typeof VPAIDCreative.expandAd == 'function' &&
+    VPAIDCreative.collapseAd && typeof VPAIDCreative.collapseAd == 'function' &&
+    VPAIDCreative.subscribe && typeof VPAIDCreative.subscribe == 'function' &&
+    VPAIDCreative.unsubscribe && typeof VPAIDCreative.unsubscribe == 'function') {
+    return true
+  }
+  return false
+}
+// This function registers the callbacks of each of the events
+VPAIDWrapper.prototype.setCallbacksForCreative = function () {
+  //The key of the object is the event name and the value is a reference to the callback function that is registered with the creative
+  var callbacks = {
+    AdStarted: this.onStartAd,
+    AdStopped: this.onStopAd,
+    AdSkipped: this.onSkipAd,
+    AdLoaded: this.onAdLoaded,
+    AdLinearChange: this.onAdLinearChange,
+    AdSizeChange: this.onAdSizeChange,
+    AdExpandedChange: this.onAdExpandedChange,
+    AdSkippableStateChange: this.onAdSkippableStateChange,
+    AdDurationChange: this.onAdDurationChange,
+    AdRemainingTimeChange: this.onAdRemainingTimeChange,
+    AdVolumeChange: this.onAdVolumeChange,
+    AdImpression: this.onAdImpression,
+    AdClickThru: this.onAdClickThru,
+    AdInteraction: this.onAdInteraction,
+    AdVideoStart: this.onAdVideoStart,
+    AdVideoFirstQuartile: this.onAdVideoFirstQuartile,
+    AdVideoMidpoint: this.onAdVideoMidpoint,
+    AdVideoThirdQuartile: this.onAdVideoThirdQuartile,
+    AdVideoComplete: this.onAdVideoComplete,
+    AdUserAcceptInvitation: this.onAdUserAcceptInvitation,
+    AdUserMinimize: this.onAdUserMinimize,
+    AdUserClose: this.onAdUserClose,
+    AdPaused: this.onAdPaused,
+    AdPlaying: this.onAdPlaying,
+    AdError: this.onAdError,
+    AdLog: this.onAdLog
+  }
+  // Looping through the object and registering each of the callbacks with the creative
 
-  // Handshake to verify VPAID version
-  VPAIDAd.prototype.handshakeVersion = function(version) {
-      console.log('handshakeVersion called with version: ' + version);
-      return '2.0';  // Return the supported VPAID version
-  };
-
-  // Initialize the ad
-  VPAIDAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
-      console.log('Ad initialized with width: ' + width + ', height: ' + height);
-      this.startTime = new Date().getTime();
-      this.callEvent('AdLoaded');
-  };
-
-  // Start the ad experience
-  VPAIDAd.prototype.startAd = function() {
-      this.isStarted = true;
-      this.callEvent('AdStarted');
-      console.log('Ad started');
-      // Simulate 30 second ad
-      setTimeout(() => {
-          this.stopAd();
-      }, this.adDuration * 1000);
-  };
-
-  // Stop the ad
-  VPAIDAd.prototype.stopAd = function() {
-      if (this.isStarted) {
-          this.isStarted = false;
-          this.callEvent('AdStopped');
-          console.log('Ad stopped');
-      }
-  };
-
-  // Skipping the ad
-  VPAIDAd.prototype.skipAd = function() {
-      console.log('Ad skipped');
-      this.callEvent('AdSkipped');
-  };
-
-  // Resize the ad
-  VPAIDAd.prototype.resizeAd = function(width, height, viewMode) {
-      console.log('Ad resized to width: ' + width + ', height: ' + height);
-      // You can add more functionality to actually handle resizing if necessary
-  };
-
-  // Pause the ad
-  VPAIDAd.prototype.pauseAd = function() {
-      console.log('Ad paused');
-      this.callEvent('AdPaused');
-  };
-
-  // Resume the ad after pause
-  VPAIDAd.prototype.resumeAd = function() {
-      console.log('Ad resumed');
-      this.callEvent('AdResumed');
-  };
-
-  // Expand the ad
-  VPAIDAd.prototype.expandAd = function() {
-      console.log('Ad expanded');
-      this.callEvent('AdExpanded');
-  };
-
-  // Collapse the ad
-  VPAIDAd.prototype.collapseAd = function() {
-      console.log('Ad collapsed');
-      this.callEvent('AdCollapsed');
-  };
-
-  // Get the ad duration in seconds
-  VPAIDAd.prototype.getAdDuration = function() {
-      console.log('getAdDuration called');
-      return this.adDuration;  // Returns the duration of the ad
-  };
-
-  // Get the current ad volume
-  VPAIDAd.prototype.getAdVolume = function() {
-      console.log('getAdVolume called');
-      return this.adVolume;  // Return the current volume (1.0 = 100%)
-  };
-
-  // Set the ad volume
-  VPAIDAd.prototype.setAdVolume = function(volume) {
-      console.log('setAdVolume called with volume: ' + volume);
-      this.adVolume = volume;
-      this.callEvent('AdVolumeChange');
-  };
-
-  // Get ad icons (if available, return null if not using icons)
-  VPAIDAd.prototype.getAdIcons = function() {
-      console.log('getAdIcons called');
-      return null;  // Return null if no icons are used in the ad
-  };
-
-  // Subscribe to events
-  VPAIDAd.prototype.subscribe = function(event, callback) {
-      this.eventsCallbacks[event] = callback;
-  };
-
-  // Call an event (notify player of ad events)
-  VPAIDAd.prototype.callEvent = function(eventType) {
-      var callback = this.eventsCallbacks[eventType];
-      if (typeof callback === 'function') {
-          callback();
-      }
-  };
-
-  // Expose the VPAID ad object
-  window.getVPAIDAd = function() {
-      return new VPAIDAd();
-  };
-})();
+  for (var eventName in callbacks) {
+    this._creative.subscribe(callbacks[eventName], eventName, this)
+  }
+}
+// Pass through for initAd - when the video player wants to call the ad
+VPAIDWrapper.prototype.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
+  this._creative.initAd(width, height, viewMode, desiredBitrate, creativeData, environmentVars)
+}
+// Callback for AdPaused
+VPAIDWrapper.prototype.onAdPaused = function () {
+  console.log('onAdPaused')
+}
+// Callback for AdPlaying
+VPAIDWrapper.prototype.onAdPlaying = function () {
+  console.log('onAdPlaying')
+}
+// Callback for AdError
+VPAIDWrapper.prototype.onAdError = function (message) {
+  console.log('onAdError: ' + message)
+}
+// Callback for AdLog
+VPAIDWrapper.prototype.onAdLog = function (message) {
+  console.log('onAdLog: ' + message)
+}
+// Callback for AdUserAcceptInvitation
+VPAIDWrapper.prototype.onAdUserAcceptInvitation = function () {
+  console.log('onAdUserAcceptInvitation')
+}
+// Callback for AdUserMinimize
+VPAIDWrapper.prototype.onAdUserMinimize = function () {
+  console.log('onAdUserMinimize')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdUserClose = function () {
+  console.log('onAdUserClose')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdSkippableStateChange = function () {
+  console.log('Ad Skippable State Changed to: ' + this._creative.getAdSkippableState())
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdExpandedChange = function () {
+  console.log('Ad Expanded Changed to: ' + this._creative.getAdExpanded())
+}
+// Pass through for getAdExpanded
+VPAIDWrapper.prototype.getAdExpanded = function () {
+  console.log('getAdExpanded')
+  return this._creative.getAdExpanded()
+}
+// Pass through for getAdSkippableState
+VPAIDWrapper.prototype.getAdSkippableState = function () {
+  console.log('getAdSkippableState')
+  return this._creative.getAdSkippableState()
+}
+// Callback for AdSizeChange
+VPAIDWrapper.prototype.onAdSizeChange = function () {
+  console.log('Ad size changed to: w=' + this._creative.getAdWidth() + ' h =' + this._creative.getAdHeight())
+}
+// Callback for AdDurationChange
+VPAIDWrapper.prototype.onAdDurationChange = function () {
+  // console.log('Ad Duration Changed to: ' + this._creative.getAdDuration())
+}
+// Callback for AdRemainingTimeChange
+VPAIDWrapper.prototype.onAdRemainingTimeChange = function () {
+  // console.log('Ad Remaining Time Changed to: ' +
+  this._creative.getAdRemainingTime()
+}
+// Pass through for getAdRemainingTime
+VPAIDWrapper.prototype.getAdRemainingTime = function () {
+  console.log('getAdRemainingTime')
+  return this._creative.getAdRemainingTime()
+}
+// Callback for AdImpression
+VPAIDWrapper.prototype.onAdImpression = function () {
+  console.log('Ad Impression')
+}
+// Callback for AdClickThru
+VPAIDWrapper.prototype.onAdClickThru = function (url, id, playerHandles) {
+  console.log('Clickthrough portion of the ad was clicked')
+}
+// Callback for AdInteraction
+VPAIDWrapper.prototype.onAdInteraction = function (id) {
+  console.log('A non-clickthrough event has occured')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdVideoStart = function () {
+  console.log('Video 0% completed')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdVideoFirstQuartile = function () {
+  console.log('Video 25% completed')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdVideoMidpoint = function () {
+  console.log('Video 50% completed')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onAdVideoThirdQuartile = function () {
+  console.log('Video 75% completed')
+}
+// Callback for AdVideoComplete
+VPAIDWrapper.prototype.onAdVideoComplete = function () {
+  console.log('Video 100% completed')
+}
+// Callback for AdLinearChange
+VPAIDWrapper.prototype.onAdLinearChange = function () {
+  console.log('Ad linear has changed: ' + this._creative.getAdLinear())
+}
+// Pass through for getAdLinear
+VPAIDWrapper.prototype.getAdLinear = function () {
+  console.log('getAdLinear')
+  return this._creative.getAdLinear()
+}
+// Pass through for startAd()
+VPAIDWrapper.prototype.startAd = function () {
+  console.log('startAd')
+  this._creative.startAd()
+}
+// Callback for AdLoaded
+VPAIDWrapper.prototype.onAdLoaded = function () {
+  console.log('ad has been loaded')
+}
+// Callback for StartAd()
+VPAIDWrapper.prototype.onStartAd = function () {
+  console.log('Ad has started')
+}
+//Pass through for stopAd()
+VPAIDWrapper.prototype.stopAd = function () {
+  this._creative.stopAd()
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onStopAd = function () {
+  console.log('Ad has stopped')
+}
+// Callback for AdUserClose
+VPAIDWrapper.prototype.onSkipAd = function () {
+  console.log('Ad was skipped')
+}
+//Passthrough for setAdVolume
+VPAIDWrapper.prototype.setAdVolume = function (val) {
+  this._creative.setAdVolume(val)
+}
+//Passthrough for getAdVolume
+VPAIDWrapper.prototype.getAdVolume = function () {
+  return this._creative.getAdVolume()
+}
+// Callback for AdVolumeChange
+VPAIDWrapper.prototype.onAdVolumeChange = function () {
+  console.log('Ad Volume has changed to - ' + this._creative.getAdVolume())
+}
+//Passthrough for resizeAd
+VPAIDWrapper.prototype.resizeAd = function (width, height, viewMode) {
+  this._creative.resizeAd()
+}
+//Passthrough for pauseAd()
+VPAIDWrapper.prototype.pauseAd = function () {
+  this._creative.pauseAd()
+}
+//Passthrough for resumeAd()
+VPAIDWrapper.prototype.resumeAd = function () {
+  this._creative.resumeAd()
+}
+//Passthrough for expandAd()
+VPAIDWrapper.prototype.expandAd = function () {
+  this._creative.expandAd()
+}
+//Passthrough for collapseAd()
+VPAIDWrapper.prototype.collapseAd = function () {
+  this._creative.collapseAd()
+}
