@@ -34,11 +34,16 @@
   };
 
   VPAIDAd.prototype.expandAd = function() {
-    // Logic to expand the ad, e.g., increasing the size of the ad container
-    console.log('expandAd called');
+    // Example of resizing the ad container
+    var adContainer = document.getElementById('adContainer'); // Make sure to reference your ad container
+    if (adContainer) {
+        adContainer.style.width = '100%';
+        adContainer.style.height = '100%';
+    }
+    console.log('expandAd called, resizing container.');
     // Notify the player that the ad has been expanded
     this.callEvent('AdExpanded');
-  };
+};
 
   VPAIDAd.prototype.collapseAd = function() {
     // Logic to collapse the ad, if necessary, or a placeholder function
