@@ -15,15 +15,9 @@ var VPAIDCreative = function() {
   this.videoElement = null;
 };
 
-VPAIDCreative.prototype.handshakeVersion = function(version, callback) {
+VPAIDCreative.prototype.handshakeVersion = function(version) {
   console.log("handshakeVersion called with version:", version);
-  console.log("handshakeVersion callback type:", typeof callback);
-  if (typeof callback === "function") {
-    console.log("handshakeVersion callback is a function");
-    callback("2.0");
-  } else {
-    console.error("handshakeVersion callback is not a function");
-  }
+  return "2.0"; // Return the version as a string, not through a callback
 };
 
 VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars, callback) {
