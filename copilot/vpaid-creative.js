@@ -7,7 +7,7 @@ var VPAIDCreative = function() {
     adExpanded: false,
     adSkippableState: false,
     adRemainingTime: 0,
-    adDuration: 0,
+    adDuration: 30,
     adVolume: 1.0,
     adIcons: null // Initialize adIcons attribute
   };
