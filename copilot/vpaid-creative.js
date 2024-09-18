@@ -7,7 +7,7 @@ var VPAIDCreative = function() {
     adExpanded: false,
     adSkippableState: false,
     adRemainingTime: 0,
-    adDuration: 30,
+    adDuration: 30, // Example duration
     adVolume: 1.0,
     adIcons: null // Initialize adIcons attribute
   };
@@ -26,6 +26,7 @@ VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrat
   // Create video element
   this.videoElement = document.createElement('video');
   this.videoElement.width = width;
+  this.videoElement.height = height;
   this.videoElement.src = 'https://rasheedsulaiman.github.io/vast/test-ad.mp4'; // Replace with your ad video URL
   this.videoElement.controls = true;
 
@@ -114,6 +115,11 @@ VPAIDCreative.prototype.dispatchEvent = function(eventName) {
 // Implement the getAdIcons method
 VPAIDCreative.prototype.getAdIcons = function() {
   return this.attributes.adIcons;
+};
+
+// Implement the getAdDuration method
+VPAIDCreative.prototype.getAdDuration = function() {
+  return this.attributes.adDuration;
 };
 
 // Expose the VPAID creative to the global scope
