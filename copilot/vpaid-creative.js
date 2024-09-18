@@ -148,6 +148,16 @@ VPAIDCreative.prototype.setAdVolume = function(volume) {
   this.dispatchEvent('AdVolumeChange');
 };
 
+// Implement the getAdWidth method
+VPAIDCreative.prototype.getAdWidth = function() {
+  return this.attributes.adWidth;
+};
+
+// Implement the getAdHeight method
+VPAIDCreative.prototype.getAdHeight = function() {
+  return this.attributes.adHeight;
+};
+
 // Expose the VPAID creative to the global scope
 window.getVPAIDAd = function() {
   return new VPAIDCreative();
