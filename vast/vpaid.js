@@ -43,6 +43,8 @@
   VPAIDAd.prototype.collapseAd = function() {
     // Logic to collapse the ad, if necessary, or a placeholder function
     console.log('collapseAd called');
+    // Notify the player that the ad has been collapsed
+    this.callEvent('AdCollapsed');
   };
 
   VPAIDAd.prototype.subscribe = function(event, callback) {
