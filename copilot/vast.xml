@@ -1,0 +1,20 @@
+<VAST version="3.0">
+  <Ad id="1">
+    <InLine>
+      <AdSystem>Example Ad System</AdSystem>
+      <AdTitle>Example VPAID Ad</AdTitle>
+      <Description>Example VPAID 2.0 Ad</Description>
+      <Creatives>
+        <Creative>
+          <Linear>
+            <MediaFiles>
+              <MediaFile delivery="progressive" type="application/javascript" apiFramework="VPAID" width="640" height="360">
+                <![CDATA[https://rasheedsulaiman.github.io/copilot/vpaid-creative.js]]>
+              </MediaFile>
+            </MediaFiles>
+          </Linear>
+        </Creative>
+      </Creatives>
+    </InLine>
+  </Ad>
+</VAST>
