@@ -78,8 +78,8 @@
 
   // Get the ad duration in seconds
   VPAIDAd.prototype.getAdDuration = function() {
-    console.log('getAdDuration called, duration:', this.adDuration);
-    return this.adDuration || 0; // Ensure 0 is returned if adDuration is undefined
+      console.log('getAdDuration called');
+      return this.adDuration;  // Returns the duration of the ad
   };
 
   // Get the current ad volume
