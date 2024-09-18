@@ -199,7 +199,6 @@ VPAIDCreative.prototype.getAdSkippableState = function() {
 
 // Implement the getAdRemainingTime method
 VPAIDCreative.prototype.getAdRemainingTime = function() {
-  console.log("getAdRemainingTime called");
   return this.attributes.adRemainingTime;
 };
 
