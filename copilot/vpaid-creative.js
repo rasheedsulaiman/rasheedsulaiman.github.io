@@ -35,7 +35,9 @@ VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrat
   document.body.appendChild(this.videoElement);
 
   this.dispatchEvent('AdLoaded');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.startAd = function(callback) {
@@ -43,7 +45,9 @@ VPAIDCreative.prototype.startAd = function(callback) {
     this.videoElement.play();
   }
   this.dispatchEvent('AdStarted');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.stopAd = function(callback) {
@@ -52,12 +56,16 @@ VPAIDCreative.prototype.stopAd = function(callback) {
     this.videoElement.remove();
   }
   this.dispatchEvent('AdStopped');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.skipAd = function(callback) {
   this.dispatchEvent('AdSkipped');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.resizeAd = function(width, height, viewMode, callback) {
@@ -68,7 +76,9 @@ VPAIDCreative.prototype.resizeAd = function(width, height, viewMode, callback) {
     this.videoElement.height = height;
   }
   this.dispatchEvent('AdSizeChange');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.pauseAd = function(callback) {
@@ -76,7 +86,9 @@ VPAIDCreative.prototype.pauseAd = function(callback) {
     this.videoElement.pause();
   }
   this.dispatchEvent('AdPaused');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.resumeAd = function(callback) {
@@ -84,19 +96,25 @@ VPAIDCreative.prototype.resumeAd = function(callback) {
     this.videoElement.play();
   }
   this.dispatchEvent('AdPlaying');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.expandAd = function(callback) {
   this.attributes.adExpanded = true;
   this.dispatchEvent('AdExpandedChange');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.collapseAd = function(callback) {
   this.attributes.adExpanded = false;
   this.dispatchEvent('AdExpandedChange');
-  callback();
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 VPAIDCreative.prototype.subscribe = function(callback, eventName, context) {
