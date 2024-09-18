@@ -21,25 +21,22 @@ VPAIDCreative.prototype.handshakeVersion = function(version) {
 };
 
 VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars, callback) {
-  console.log("initAd called with width:", width, "height:", height, "viewMode:", viewMode, "desiredBitrate:", desiredBitrate);
+  console.log("initAd called with width:", width, "height:", height, "viewMode:", viewMode);
   this.attributes.adWidth = width;
   this.attributes.adHeight = height;
-
   // Create and append video element
   this.videoElement = document.createElement("video");
   this.videoElement.width = width;
   this.videoElement.height = height;
-  this.videoElement.src = "https://rasheedsulaiman.github.io/vast/test-ad.mp4"; // Replace with your ad video URL
+  this.videoElement.src = "https://rasheedsulaiman.github.io/vast/test-ad.mp4";
   this.videoElement.controls = true;
   document.body.appendChild(this.videoElement);
-
   this.dispatchEvent("AdLoaded");
-
-  // Safely check if callback is a function before calling it
+  // Safely check if callback is a function
   if (typeof callback === "function") {
     callback();
   } else {
-    console.error("initAd callback is not a function");
+    console.warn("initAd callback is not a function");
   }
 };
 
@@ -49,12 +46,11 @@ VPAIDCreative.prototype.startAd = function(callback) {
     this.videoElement.play();
   }
   this.dispatchEvent("AdStarted");
-
-  // Safely check if callback is a function before calling it
+  // Safely check if callback is a function
   if (typeof callback === "function") {
     callback();
   } else {
-    console.error("startAd callback is not a function");
+    console.warn("startAd callback is not a function");
   }
 };
 
