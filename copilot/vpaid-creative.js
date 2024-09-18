@@ -17,7 +17,12 @@ var VPAIDCreative = function() {
 
 VPAIDCreative.prototype.handshakeVersion = function(version, callback) {
   console.log('handshakeVersion called with version:', version);
-  callback('2.0');
+  if (typeof callback === 'function') {
+    console.log('handshakeVersion callback is a function');
+    callback('2.0');
+  } else {
+    console.error('handshakeVersion callback is not a function');
+  }
 };
 
 VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars, callback) {
@@ -38,7 +43,10 @@ VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrat
 
   this.dispatchEvent('AdLoaded');
   if (typeof callback === 'function') {
+    console.log('initAd callback is a function');
     callback();
+  } else {
+    console.error('initAd callback is not a function');
   }
 };
 
@@ -49,7 +57,10 @@ VPAIDCreative.prototype.startAd = function(callback) {
   }
   this.dispatchEvent('AdStarted');
   if (typeof callback === 'function') {
+    console.log('startAd callback is a function');
     callback();
+  } else {
+    console.error('startAd callback is not a function');
   }
 };
 
@@ -61,7 +72,10 @@ VPAIDCreative.prototype.stopAd = function(callback) {
   }
   this.dispatchEvent('AdStopped');
   if (typeof callback === 'function') {
+    console.log('stopAd callback is a function');
     callback();
+  } else {
+    console.error('stopAd callback is not a function');
   }
 };
 
@@ -69,7 +83,10 @@ VPAIDCreative.prototype.skipAd = function(callback) {
   console.log('skipAd called');
   this.dispatchEvent('AdSkipped');
   if (typeof callback === 'function') {
+    console.log('skipAd callback is a function');
     callback();
+  } else {
+    console.error('skipAd callback is not a function');
   }
 };
 
@@ -83,7 +100,10 @@ VPAIDCreative.prototype.resizeAd = function(width, height, viewMode, callback) {
   }
   this.dispatchEvent('AdSizeChange');
   if (typeof callback === 'function') {
+    console.log('resizeAd callback is a function');
     callback();
+  } else {
+    console.error('resizeAd callback is not a function');
   }
 };
 
@@ -94,7 +114,10 @@ VPAIDCreative.prototype.pauseAd = function(callback) {
   }
   this.dispatchEvent('AdPaused');
   if (typeof callback === 'function') {
+    console.log('pauseAd callback is a function');
     callback();
+  } else {
+    console.error('pauseAd callback is not a function');
   }
 };
 
@@ -105,7 +128,10 @@ VPAIDCreative.prototype.resumeAd = function(callback) {
   }
   this.dispatchEvent('AdPlaying');
   if (typeof callback === 'function') {
+    console.log('resumeAd callback is a function');
     callback();
+  } else {
+    console.error('resumeAd callback is not a function');
   }
 };
 
@@ -114,7 +140,10 @@ VPAIDCreative.prototype.expandAd = function(callback) {
   this.attributes.adExpanded = true;
   this.dispatchEvent('AdExpandedChange');
   if (typeof callback === 'function') {
+    console.log('expandAd callback is a function');
     callback();
+  } else {
+    console.error('expandAd callback is not a function');
   }
 };
 
@@ -123,7 +152,10 @@ VPAIDCreative.prototype.collapseAd = function(callback) {
   this.attributes.adExpanded = false;
   this.dispatchEvent('AdExpandedChange');
   if (typeof callback === 'function') {
+    console.log('collapseAd callback is a function');
     callback();
+  } else {
+    console.error('collapseAd callback is not a function');
   }
 };
 
@@ -141,6 +173,8 @@ VPAIDCreative.prototype.dispatchEvent = function(eventName) {
   console.log('dispatchEvent called for event:', eventName);
   if (this.eventsCallbacks[eventName]) {
     this.eventsCallbacks[eventName]();
+  } else {
+    console.log('No callback registered for event:', eventName);
   }
 };
 
@@ -207,6 +241,5 @@ VPAIDCreative.prototype.getAdLinear = function() {
 
 // Expose the VPAID creative to the global scope
 window.getVPAIDAd = function() {
-  console.log('getVPAIDAd called');
   return new VPAIDCreative();
 };
