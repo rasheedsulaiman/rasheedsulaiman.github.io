@@ -33,11 +33,18 @@
       }
   };
 
+  VPAIDAd.prototype.expandAd = function() {
+    // Logic to expand the ad, e.g., increasing the size of the ad container
+    console.log('expandAd called');
+    // Notify the player that the ad has been expanded
+    this.callEvent('AdExpanded');
+  };
+
   VPAIDAd.prototype.collapseAd = function() {
     // Logic to collapse the ad, if necessary, or a placeholder function
     console.log('collapseAd called');
   };
-  
+
   VPAIDAd.prototype.subscribe = function(event, callback) {
       this.eventsCallbacks[event] = callback;
   };
