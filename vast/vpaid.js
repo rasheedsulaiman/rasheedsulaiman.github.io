@@ -43,7 +43,13 @@
     console.log('expandAd called, resizing container.');
     // Notify the player that the ad has been expanded
     this.callEvent('AdExpanded');
-};
+  };
+
+  VPAIDAd.prototype.getAdIcons = function() {
+    // If no ad icons are present, return null or an empty array
+    console.log('getAdIcons called');
+    return null;  // You could also return an empty array or other appropriate structure
+  };
 
   VPAIDAd.prototype.collapseAd = function() {
     // Logic to collapse the ad, if necessary, or a placeholder function
