@@ -33,6 +33,11 @@
       }
   };
 
+  VPAIDAd.prototype.collapseAd = function() {
+    // Logic to collapse the ad, if necessary, or a placeholder function
+    console.log('collapseAd called');
+  };
+  
   VPAIDAd.prototype.subscribe = function(event, callback) {
       this.eventsCallbacks[event] = callback;
   };
