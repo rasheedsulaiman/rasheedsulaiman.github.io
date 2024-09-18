@@ -8,7 +8,8 @@ var VPAIDCreative = function() {
     adSkippableState: false,
     adRemainingTime: 0,
     adDuration: 0,
-    adVolume: 1.0
+    adVolume: 1.0,
+    adIcons: null // Initialize adIcons attribute
   };
   this.videoElement = null;
 };
@@ -25,7 +26,6 @@ VPAIDCreative.prototype.initAd = function(width, height, viewMode, desiredBitrat
   // Create video element
   this.videoElement = document.createElement('video');
   this.videoElement.width = width;
-  this.videoElement.height = height;
   this.videoElement.src = 'https://rasheedsulaiman.github.io/vast/test-ad.mp4'; // Replace with your ad video URL
   this.videoElement.controls = true;
 
