@@ -2,8 +2,8 @@
 var VPAIDCreative = function() {
   this.eventsCallbacks = {};
   this.attributes = {
-    adWidth: 0,
-    adHeight: 0,
+    adWidth: 640,
+    adHeight: 360,
     adExpanded: false,
     adSkippableState: false,
     adRemainingTime: 0,
