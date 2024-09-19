@@ -217,61 +217,50 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
 
   // slot and videoSlot are passed as part of the environmentVars
   this._slot = environmentVars.slot;
-  this._videoSlot = environmentVars.videoSlot;
 
-  // Fix for Safari mobile browser
-  //this._videoSlot.setAttribute('muted','');
-  //this._videoSlot.muted = true;
+  // Create an iframe element to embed the video
+  var iframe = document.createElement('iframe');
+  iframe.width = width;
+  iframe.height = height;
+  iframe.setAttribute('frameBorder', '0');
+  iframe.setAttribute('allowfullscreen', 'true');
 
-  this._attributes.width = width;
-  this._attributes.height = height;
-  this._attributes.viewMode = viewMode;
-  this._attributes.desiredBitrate = desiredBitrate;
+  // Insert the iframe into the slot
+  this._slot.innerHTML = ''; // Clear previous content
+  this._slot.appendChild(iframe);
 
-  this.log('initAd ' + width + 'x' + height + ' ' + viewMode + ' ' + desiredBitrate);
+  // Write the video player code inside the iframe
+  var iframeDoc = iframe.contentWindow.document;
+  iframeDoc.open();
+  iframeDoc.write(`
+    <html>
+      <body style="margin:0;padding:0;overflow:hidden;">
+        <video id="videoSlot" width="100%" height="100%" controls>
+          <source src="https://rasheedsulaiman.github.io/vast/test-ad.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </body>
+    </html>
+  `);
+  iframeDoc.close();
 
-  //console.log('VP > ', creativeData);
-  //console.log('VP > environmentVars', environmentVars);
-  //console.log('VP > VIDEO SLOT', this._videoSlot);
+  // Get the video element from the iframe
+  this._videoSlot = iframe.contentWindow.document.getElementById('videoSlot');
 
-  var that = this;
-  if(this._videoSlot == null) {
-      this._videoSlot = document.createElement('video');
-      this._slot.appendChild(this._videoSlot);
-  }
-
-  this._videoSlot.setAttribute('src', 'https://rasheedsulaiman.github.io/vast/test-ad.mp4');
-
+  // Set up event listeners for the video slot
   this._videoSlot.addEventListener('timeupdate', this.timeUpdateHandler.bind(this), false);
   this._videoSlot.addEventListener('loadedmetadata', function(event) {
-      // The ad duration is not known until the media metadata is loaded.
-      // Then, update the player with the duration change.
-      that._attributes.duration = event.target.duration;
-      that._attributes.remainingTime = event.target.duration;
-      that.onAdDurationChange();
-  }, false);
+      this._attributes.duration = event.target.duration;
+      this._attributes.remainingTime = event.target.duration;
+      this.onAdDurationChange();
+  }.bind(this), false);
 
   this._videoSlot.addEventListener('ended', this.stopAd.bind(this), false);
 
-  // AdClickThru
-  /*
-  this._slot.addEventListener('click', function(event) {
-      //var targetUrl = 'http://192.168.1.111/';
-      //var opener = window.open(targetUrl, "_blank");
-      //void 0 !== opener ? opener.focus() : window.location.href = targetUrl
-      if(!that._isPaused) {
-          that.pauseAd();
-      } else {
-          that.resumeAd();
-      }
-  }, false);
-  */
-  this._slot.addEventListener('click', function() {
-      that.onAdClickThru('', '0');
-  }, false);
-
+  // Dispatch AdLoaded event
   this.onAdLoaded();
 };
+
 LinearAd.prototype.startAd = function() {
   console.log('VP > startAd');
 
