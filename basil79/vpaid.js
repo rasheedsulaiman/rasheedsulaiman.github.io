@@ -235,7 +235,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   iframeDoc.write(`
     <html>
       <body style="margin:0;padding:0;overflow:hidden;">
-        <video id="videoSlot" width="100%" height="100%" playsinline preload="auto">
+        <video id="videoSlot" width="100%" height="100%" playsinline preload="auto" autoplay>
           <source src="https://cdn1.decide.dev/uploads/37341e997a86f75e592fb57b06f839bc7c7267a74a3f05d1e946b1edd3aa0f6f_video_large" type="video/mp4">
           Your browser does not support the video tag.
         </video>
