@@ -52,7 +52,7 @@ var LinearAd = function() {
       currentTime : 0,
       remainingTime : 30,
       skippableState : false,
-      volume : 1
+      volume : 0
   };
 
   this._quartileEvents = [
