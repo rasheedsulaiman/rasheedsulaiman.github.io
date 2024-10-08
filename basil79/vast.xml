@@ -3,7 +3,6 @@
 		<InLine>
 			<AdSystem>CustomAds</AdSystem>
 			<AdTitle>CustomAds</AdTitle>
-			<Impression>https://www.example.com/impression</Impression>
 			<Creatives>
 				<Creative sequence="1">
 					<Linear>
