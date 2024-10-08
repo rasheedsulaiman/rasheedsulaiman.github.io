@@ -41,7 +41,7 @@ var LinearAd = function() {
   this._attributes = {
       companions : "",
       desiredBitrate : 256,
-      duration : 10,
+      duration : 30,
       expanded : false,
       width : 0,
       height : 0,
@@ -224,7 +224,6 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   iframe.height = height;
   iframe.setAttribute('frameBorder', '0');
   iframe.setAttribute('allowfullscreen', 'true');
-  iframe.setAttribute('loading', 'eager');
 
   // Insert the iframe into the slot
   this._slot.innerHTML = ''; // Clear previous content
@@ -236,50 +235,10 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   iframeDoc.write(`
     <html>
       <body style="margin:0;padding:0;overflow:hidden;">
-        <div id="el-0-17570198596943884">
-          <div class="embed-cntnr">
-            <div class="content-item">
-              <div class="fi-cntnr">
-                <div class="editorial fi grd-i-cntnr">
-                  <div class="item-top">
-                    <div class="top">
-                      <div class="content-layout">
-                        <div class="header-image" style="">
-                          <a href="/brand" class="image-promoted-label _allow_click" style="display: none;">Ad</a>
-                          <div class="image-container">
-                              <div class="video-cntnr">
-                              <video id="videoSlot" width="100%" height="100%" class="full-width" id="2039580" src="https://cdn1.decide.dev/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large" style="height: 321.1875px;" poster="https://cdn1.decide.dev/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_large"></video>
-                                <div class="video-controls">
-                                  <svg class="icon-pause _pause _allow_click" fill="#FFFFFF" width="20px" height="20px" viewBox="-64 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>pause</title><path class="_allow_click" d="M64 96L160 96 160 416 64 416 64 96ZM224 96L320 96 320 416 224 416 224 96Z"></path></svg>
-                                  <svg class="icon-play _play _allow_click hidey" fill="#FFFFFF" width="20px" height="20px" viewBox="-60 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>play</title><path class="_allow_click" d="M64 96L328 256 64 416 64 96Z"></path></svg>
-                                  <svg class="_mute _allow_click" fill="#FFFFFF" width="20px" height="20px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>vol-mute</title><path class="_allow_click" d="M420 452L376 408Q354 423 329 434 303 445 280 448L280 400Q311 395 341 373L240 272 240 448 128 336 64 336 64 176 144 176 60 92 92 60 452 420 420 452ZM240 64L240 144 201 102 240 64ZM400 256Q400 203 365 162 330 120 280 112L280 64Q326 69 365 97 403 124 426 167 448 209 448 256 448 275 443 300 437 325 429 341L392 304Q400 278 400 256ZM284 164Q314 173 333 198 352 223 352 256L352 260 284 192 284 164Z"></path></svg>
-                                  <svg class="hidey _unmute _allow_click" fill="#FFFFFF" width="20px" height="20px" viewBox="0 -2 516 516" xmlns="http://www.w3.org/2000/svg"><title>vol-high</title><path class="_allow_click" d="M64 176L128 176 240 64 240 448 128 336 64 336 64 176ZM280 400Q330 393 365 351 400 309 400 256 400 203 365 161 330 119 280 112L280 64Q326 69 365 97 403 124 426 167 448 209 448 256 448 303 426 346 403 388 365 416 326 443 280 448L280 400ZM284 164Q314 173 333 198 352 223 352 256 352 286 333 313 314 339 284 349L284 164Z"></path></svg>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                        <div class="body-cntnr">
-                          <div class="section title-section">
-                            <div class="headline-text h3 p-hover-color">Earth video</div>
-                          </div>
-                          <a href="/brand" class="secondary-link light-link iab-promoted-label _allow_click" style="display: none;">Sponsored Ad</a>
-                            <div class="section content-action-buttons">
-                              <div data-button-id="0" class="_track-event button-unit unit">
-                                <div class="std-action-bttn medium-bttn std-bttn pur-bttn full-width p-background p-border p-hover">Learn More</div>
-                              </div>
-                            </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="embed-hdr single-content">
-            <a href="/brand" class="secondary-link light-link promoted-label _allow_click">Sponsored Ad</a>
-          </div>
-        </div> 
+        <video id="videoSlot" width="100%" height="100%">
+          <source src="https://cdn1.decide.dev/uploads/37341e997a86f75e592fb57b06f839bc7c7267a74a3f05d1e946b1edd3aa0f6f_video_large" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </body>
     </html>
   `);
