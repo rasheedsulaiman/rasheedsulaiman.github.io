@@ -264,7 +264,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
 LinearAd.prototype.startAd = function() {
   console.log('VP > startAd');
 
-  this._videoSlot.play();
+  // this._videoSlot.play();
   //this._videoSlot.load();
   this.onAdStarted();
 };
