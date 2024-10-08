@@ -235,7 +235,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   iframeDoc.write(`
     <html>
       <body style="margin:0;padding:0;overflow:hidden;">
-        <video id="videoSlot" width="100%" height="100%" playsinline controls>
+        <video id="videoSlot" width="100%" height="100%" playsinline controls preload="auto">
           <source src="https://rasheedsulaiman.github.io/vast/test-ad.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
