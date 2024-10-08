@@ -248,7 +248,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
                           <a href="/brand" class="image-promoted-label _allow_click" style="display: none;">Ad</a>
                           <div class="image-container">
                               <div class="video-cntnr">
-                              <video id="videoSlot" width="100%" autoplay playsinline height="100%" class="full-width" id="2039580" src="https://cdn1.decide.dev/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large" style="height: 321.1875px;" poster="https://cdn1.decide.dev/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_large"></video>
+                              <video id="videoSlot" width="100%" autoplay muted playsinline height="100%" class="full-width" id="2039580" src="https://cdn1.decide.dev/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large" style="height: 321.1875px;" poster="https://cdn1.decide.dev/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_large"></video>
                                 <div class="video-controls">
                                   <svg class="icon-pause _pause _allow_click" fill="#FFFFFF" width="20px" height="20px" viewBox="-64 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>pause</title><path class="_allow_click" d="M64 96L160 96 160 416 64 416 64 96ZM224 96L320 96 320 416 224 416 224 96Z"></path></svg>
                                   <svg class="icon-play _play _allow_click hidey" fill="#FFFFFF" width="20px" height="20px" viewBox="-60 0 512 512" xmlns="http://www.w3.org/2000/svg"><title>play</title><path class="_allow_click" d="M64 96L328 256 64 416 64 96Z"></path></svg>
