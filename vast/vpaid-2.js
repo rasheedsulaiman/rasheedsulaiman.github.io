@@ -90,7 +90,7 @@ var getVPAIDAd = function () {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
         slot: environmentVars.slot,
-        videoSlot: environmentVars.videoSlot,
+        videoSlot: environmentVars.videoSlot || null,
         width: width,
         height: height,
         viewMode: viewMode,
@@ -110,51 +110,59 @@ var getVPAIDAd = function () {
         return setTimeout(adEvents.startAd, 250);
     }
 
+    if (adProperties.videoSlot) {
+        console.log('Using video slot');
+        adProperties.videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large');
+        adProperties.videoSlot.setAttribute('id', 'dynamic-video');
+        adProperties.videoSlot.play().catch(function(error) {
+          console.log('Error playing video: ' + error);
+        });
+    }
     // Function to dynamically create and insert a video element above a div with id "on-c"
-    function createAndRenderVideo() {
+    // function createAndRenderVideo() {
 
-      // Define the video HTML with inline styles
-      var videoElement = str_to_element('<video width="auto" height="100%" playsinline id="dynamic-video" style="position: relative;margin:0 auto;" src="https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large"></video>');
+    //   // Define the video HTML with inline styles
+    //   var videoElement = str_to_element('<video width="auto" height="100%" playsinline id="dynamic-video" style="position: relative;margin:0 auto;" src="https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large"></video>');
 
-      // Add an event listener to get the video duration when metadata is loaded
-      videoElement.addEventListener('loadedmetadata', function () {
-        var videoDuration = videoElement.duration;
+    //   // Add an event listener to get the video duration when metadata is loaded
+    //   videoElement.addEventListener('loadedmetadata', function () {
+    //     var videoDuration = videoElement.duration;
 
-        // Set the duration in adProperties
-        if (typeof adProperties !== 'undefined') {
-            adProperties.duration = videoDuration;
-            adEvents.onAdDurationChange();
-        }
-      });
+    //     // Set the duration in adProperties
+    //     if (typeof adProperties !== 'undefined') {
+    //         adProperties.duration = videoDuration;
+    //         adEvents.onAdDurationChange();
+    //     }
+    //   });
 
-      // Ensure the video can load properly
-      videoElement.addEventListener('loadeddata', function() {
-        videoElement.play().catch(function(error) {});
-      });
+    //   // Ensure the video can load properly
+    //   videoElement.addEventListener('loadeddata', function() {
+    //     videoElement.play().catch(function(error) {});
+    //   });
 
-      // Handle any playback errors
-      videoElement.addEventListener('error', function(e) {
-        console.log('Error playing video: ' + e);
-      });
+    //   // Handle any playback errors
+    //   videoElement.addEventListener('error', function(e) {
+    //     console.log('Error playing video: ' + e);
+    //   });
 
-      // Find the div with id "on-c"
-      var referenceDiv = document.getElementById('on-c');  // Use the correct div ID
+    //   // Find the div with id "on-c"
+    //   var referenceDiv = document.getElementById('on-c');  // Use the correct div ID
 
-      // Check if the reference div exists in the DOM
-      if (referenceDiv) {
-        // Insert the video element after the reference div
-        referenceDiv.parentNode.insertBefore(videoElement, referenceDiv.nextSibling);
-      } else {
-        console.log('Reference div not found');
-      }
-    }
-    createAndRenderVideo();
+    //   // Check if the reference div exists in the DOM
+    //   if (referenceDiv) {
+    //     // Insert the video element after the reference div
+    //     referenceDiv.parentNode.insertBefore(videoElement, referenceDiv.nextSibling);
+    //   } else {
+    //     console.log('Reference div not found');
+    //   }
+    // }
+    // createAndRenderVideo();
 
-    function str_to_element (str_elem) {
-      var elem = document.createElement('div');
-      elem.innerHTML = str_elem;
-      return elem.firstChild;
-    }
+    // function str_to_element (str_elem) {
+    //   var elem = document.createElement('div');
+    //   elem.innerHTML = str_elem;
+    //   return elem.firstChild;
+    // }
 
     adProperties.startTime = getCurrentTime();
     adInterval = setInterval(updateAd, 500);
