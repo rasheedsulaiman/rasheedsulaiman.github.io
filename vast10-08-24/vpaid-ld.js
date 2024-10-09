@@ -45,7 +45,6 @@ var getVPAIDAd = function () {
   var adProperties,
       adInterval,
       adContainer,
-      adScript,
       adEvents = {},
       eventListeners = {},
       adVolume = 1,
