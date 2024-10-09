@@ -81,7 +81,10 @@ var getVPAIDAd = function () {
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
-
+  adEvents.timeUpdateHandler = function () {
+    adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
+    triggerEvent("AdRemainingTimeChange");
+  }
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
@@ -107,7 +110,8 @@ var getVPAIDAd = function () {
       adProperties.videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large');
       adProperties.videoSlot.setAttribute('id', 'dynamic-video');
 
-      // Set up video event listener
+      // Set up video event listeners
+      adProperties.videoSlot.addEventListener('timeupdate', adEvents.timeUpdateHandler.bind(this), false);
       adProperties.videoSlot.addEventListener('loadedmetadata', function () {
         var videoDuration = adProperties.videoSlot.duration;
         if (typeof adProperties !== 'undefined') {
@@ -116,6 +120,7 @@ var getVPAIDAd = function () {
           adEvents.onAdDurationChange();
         }
       });
+      adProperties.videoSlot.addEventListener('ended', adEvents.stopAd.bind(this), false);
 
       adProperties.videoSlot.addEventListener('error', function (e) {
         console.log('Error playing video: ', e);
@@ -148,20 +153,15 @@ var getVPAIDAd = function () {
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
   adEvents.stopAd = function () {
-    adProperties.ready = false;
-    clearTimeout(adInterval);
-    console.log("Stopping the ad...");
-  
-    if (adContainer && adContainer.parentNode) {
-      console.log("Removing ad container.");
-      adContainer.parentNode.removeChild(adContainer);
-    }
-  
-    // Trigger the AdStopped event immediately
-    triggerEvent("AdStopped");
-    console.log("Ad stopped successfully.");
+      adProperties.ready = false;
+      clearTimeout(adInterval);
+      if (adContainer.parentNode) {
+          adContainer.parentNode.removeChild(adContainer);
+      }
+      setTimeout(function () {
+          triggerEvent("AdStopped");
+      }, 100);
   };
-  
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
       adProperties.height = height;
@@ -170,17 +170,15 @@ var getVPAIDAd = function () {
       triggerEvent("AdSizeChange");
   };
   adEvents.pauseAd = function () {
+    adProperties.videoSlot.pause();
     adPaused = true;
     triggerEvent("AdPaused");
-    console.log('Ad paused');
   };
-  
   adEvents.resumeAd = function () {
+    adProperties.videoSlot.play();
     adPaused = false;
     triggerEvent("AdPlaying");
-    console.log('Ad resumed');
   };
-  
   adEvents.onAdImpression = function () {
     triggerEvent(VPAID_EVENTS.AdImpression);
   };
@@ -323,17 +321,8 @@ var getVPAIDAd = function () {
     );
   }
   function updateAd() {
-    if (adPaused) {
-        return;  // Do not update the ad if it is paused
-    }
-    // Calculate remaining time based on video slot's currentTime
-    if (adProperties.videoSlot) {
-      adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
-    }
-    // Update skip duration timer and display remaining time
     var elapsedTime = getCurrentTime() - adProperties.startTime;
     var remainingTime = Math.floor(adProperties.skipDuration - elapsedTime);
-
     if (remainingTime > 0) {
         adElements.remaining.innerHTML = remainingTime;
     } else if (adElements.remaining) {
@@ -346,19 +335,13 @@ var getVPAIDAd = function () {
         adElements.skip.style.backgroundColor = "#000000cc";
         adElements.skip.style.borderColor = "#FFF";
         adElements.skip.style.fontWeight = "bold";
-        let skipButtonClicked = false;
         adElements.skip.onclick = function () {
-          if (!skipButtonClicked) {
-            skipButtonClicked = true;
-            triggerEvent("AdSkipped");
+            triggerEvent("AdUserClose");
             adEvents.stopAd();
-          }
         };
-
-    } else if (adProperties.remainingTime <= 0) {
+    } else if (elapsedTime > adProperties.duration) {
         adEvents.stopAd();
     }
-    triggerEvent("AdRemainingTimeChange"); // Trigger the remaining time change event
   }
   return adEvents;
 };
