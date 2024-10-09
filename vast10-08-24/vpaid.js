@@ -212,59 +212,75 @@ LinearAd.prototype.timeUpdateHandler = function() {
   }
 };
 LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
+
   console.log('initAd', width, height, viewMode, desiredBitrate, creativeData, environmentVars);
 
-  // Assign environment variables
+  // slot and videoSlot are passed as part of the environmentVars
   this._slot = environmentVars.slot;
   this._videoSlot = environmentVars.videoSlot;
 
-  // Set up ad attributes
+  // Fix for Safari mobile browser
+  //this._videoSlot.setAttribute('muted','');
+  //this._videoSlot.muted = true;
+
   this._attributes.width = width;
   this._attributes.height = height;
   this._attributes.viewMode = viewMode;
   this._attributes.desiredBitrate = desiredBitrate;
 
-  // Create and insert the video element dynamically
-  if (!this._videoSlot) {
-    this._videoSlot = document.createElement('video');
-    this._videoSlot.id = 'dynamic-video';
-    this._videoSlot.width = width;
-    this._videoSlot.height = height;
-    this._videoSlot.playsInline = true;
-    this._videoSlot.src = 'https://cdn1.decide.co/uploads/36ea573d1eb6efdd8d03fb2ce4b08ac6153e44bf09bda98e404418b54b2c7c97_video_large';
-    this._slot.appendChild(this._videoSlot);
+  this.log('initAd ' + width + 'x' + height + ' ' + viewMode + ' ' + desiredBitrate);
+
+  //console.log('VP > ', creativeData);
+  //console.log('VP > environmentVars', environmentVars);
+  //console.log('VP > VIDEO SLOT', this._videoSlot);
+
+  var that = this;
+  if(this._videoSlot == null) {
+      this._videoSlot = document.createElement('video');
+      this._slot.appendChild(this._videoSlot);
   }
 
-  // Set up event listeners on the video element
-  this._videoSlot.addEventListener('loadedmetadata', (event) => {
-    this._attributes.duration = event.target.duration;
-    this._attributes.remainingTime = event.target.duration;
-    this.onAdDurationChange();
+  this._videoSlot.setAttribute('id', 'dynamic-video');
+
+  this._videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/36ea573d1eb6efdd8d03fb2ce4b08ac6153e44bf09bda98e404418b54b2c7c97_video_large');
+
+  this._videoSlot.addEventListener('timeupdate', this.timeUpdateHandler.bind(this), false);
+  this._videoSlot.addEventListener('loadedmetadata', function(event) {
+      // The ad duration is not known until the media metadata is loaded.
+      // Then, update the player with the duration change.
+      that._attributes.duration = event.target.duration;
+      that._attributes.remainingTime = event.target.duration;
+      that.onAdDurationChange();
   }, false);
 
   this._videoSlot.addEventListener('ended', this.stopAd.bind(this), false);
-  this._videoSlot.addEventListener('timeupdate', this.timeUpdateHandler.bind(this), false);
 
-  // Handle clicks on the ad slot
-  this._slot.addEventListener('click', () => {
-    this.onAdClickThru('', '0');
+  // AdClickThru
+  /*
+  this._slot.addEventListener('click', function(event) {
+      //var targetUrl = 'http://192.168.1.111/';
+      //var opener = window.open(targetUrl, "_blank");
+      //void 0 !== opener ? opener.focus() : window.location.href = targetUrl
+      if(!that._isPaused) {
+          that.pauseAd();
+      } else {
+          that.resumeAd();
+      }
+  }, false);
+  */
+  this._slot.addEventListener('click', function() {
+      that.onAdClickThru('', '0');
   }, false);
 
   this.onAdLoaded();
 };
-
 LinearAd.prototype.startAd = function() {
   console.log('VP > startAd');
 
-  // Start the video playback
-  this._videoSlot.play().then(() => {
-    this.onAdStarted();
-  }).catch(error => {
-    console.error('Error starting the video:', error);
-    this.onAdError('Video playback failed.');
-  });
+  this._videoSlot.play();
+  //this._videoSlot.load();
+  this.onAdStarted();
 };
-
 LinearAd.prototype.getAdVolume = function() {
   return this._attributes.volume;
 };
@@ -320,49 +336,14 @@ LinearAd.prototype.skipAd = function() {
   this.onAdSkipped();
 };
 LinearAd.prototype.subscribe = function(callback, eventName, context) {
-  // Ensure context is bound correctly
-  var boundCallback = callback.bind(context);
-
-  // Check if event already exists; if not, create a new array
-  if (!(eventName in this._eventCallbacks)) {
-    this._eventCallbacks[eventName] = [];
-  }
-
-  // Add the callback to the array of listeners
-  this._eventCallbacks[eventName].push(boundCallback);
-
-  console.log(`Subscribed to event: ${eventName}`);
+  this.log('Subscribe ' + eventName);
+  var givenCallback = callback.bind(context);
+  this._eventCallbacks[eventName] = givenCallback;
 };
-
-LinearAd.prototype.unsubscribe = function(eventName, callback) {
-  if (eventName in this._eventCallbacks) {
-    // Remove the specific callback, if provided
-    if (callback) {
-      this._eventCallbacks[eventName] = this._eventCallbacks[eventName].filter(
-        (listener) => listener !== callback
-      );
-    } else {
-      // If no callback is provided, clear all listeners for the event
-      this._eventCallbacks[eventName] = [];
-    }
-
-    console.log(`Unsubscribed from event: ${eventName}`);
-  }
+LinearAd.prototype.unsubscribe = function(eventName) {
+  this.log('unsubscribe ' + eventName);
+  this._eventCallbacks[eventName] = null;
 };
-LinearAd.prototype.triggerEvent = function(eventName) {
-  if (eventName in this._eventCallbacks) {
-    // Execute each listener for the event
-    this._eventCallbacks[eventName].forEach(function(callback) {
-      try {
-        callback();
-      } catch (error) {
-        console.error(`Error executing ${eventName} listener:`, error);
-      }
-    });
-  }
-};
-
-
 LinearAd.prototype.getAdWidth = function() {
   return this._attributes.width;
 };
