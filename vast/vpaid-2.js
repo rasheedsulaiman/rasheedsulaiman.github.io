@@ -81,10 +81,6 @@ var getVPAIDAd = function () {
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
-  adEvents.timeUpdateHandler = function () {
-    adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
-    triggerEvent("AdRemainingTimeChange");
-  }
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
@@ -96,7 +92,6 @@ var getVPAIDAd = function () {
         expanded: false,
         skippableState: false,
         duration: 60,
-        remainingTime: 60,
         skipDuration: 5,
         startTime: 0,
         ready: false
@@ -111,16 +106,13 @@ var getVPAIDAd = function () {
       adProperties.videoSlot.setAttribute('id', 'dynamic-video');
 
       // Set up video event listeners
-      adProperties.videoSlot.addEventListener('timeupdate', adEvents.timeUpdateHandler.bind(this), false);
       adProperties.videoSlot.addEventListener('loadedmetadata', function () {
         var videoDuration = adProperties.videoSlot.duration;
         if (typeof adProperties !== 'undefined') {
           adProperties.duration = videoDuration;
-          adProperties.remainingTime = videoDuration;
           adEvents.onAdDurationChange();
         }
       });
-      adProperties.videoSlot.addEventListener('ended', adEvents.stopAd.bind(this), false);
 
       adProperties.videoSlot.addEventListener('error', function (e) {
         console.log('Error playing video: ', e);
@@ -153,33 +145,14 @@ var getVPAIDAd = function () {
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
   adEvents.stopAd = function () {
-    adProperties.ready = false;
-    clearTimeout(adInterval);
-
-    // Explicitly stop and remove the video element if it exists
-    if (adProperties.videoSlot) {
-        try {
-            adProperties.videoSlot.pause(); // Stop the video
-            adProperties.videoSlot.src = ""; // Clear the source
-            adProperties.videoSlot.load(); // Ensure the video stops loading
-        } catch (e) {
-            console.log("Error stopping the video: ", e);
-        }
-        // Remove the video element from its parent container
-        if (adProperties.videoSlot.parentNode) {
-            adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
-        }
-    }
-
-    // Remove the ad container if it exists
-    if (adContainer && adContainer.parentNode) {
-        adContainer.parentNode.removeChild(adContainer);
-    }
-
-    // Dispatch the AdStopped event after a short delay to allow DOM updates
-    setTimeout(function () {
-        triggerEvent("AdStopped");
-    }, 100);
+      adProperties.ready = false;
+      clearTimeout(adInterval);
+      if (adContainer.parentNode) {
+          adContainer.parentNode.removeChild(adContainer);
+      }
+      setTimeout(function () {
+          triggerEvent("AdStopped");
+      }, 100);
   };
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
@@ -236,8 +209,11 @@ var getVPAIDAd = function () {
       return adProperties.skippableState;
   };
   adEvents.getAdRemainingTime = function () {
-    console.log('Remaining time: ', adProperties.remainingTime);
-    return adProperties.remainingTime;
+      var remainingTime = adProperties.duration;
+      if (adProperties.startTime) {
+          remainingTime -= Math.floor(getCurrentTime() - adProperties.startTime);
+      }
+      return remainingTime;
   };
   adEvents.getAdDuration = function () {
     return adProperties.duration;
