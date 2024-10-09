@@ -101,6 +101,8 @@ var getVPAIDAd = function () {
         startTime: 0,
         ready: false
     };
+    console.log('Ad properties.slot: ', adProperties.slot);
+    console.log('Ad properties.videoSlot: ', adProperties.videoSlot);
     initializeAdContainer();
   };
   adEvents.startAd = function () {
