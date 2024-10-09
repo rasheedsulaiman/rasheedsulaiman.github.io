@@ -1,10 +1,22 @@
 var getVPAIDAd = function () {
-  var adProperties = {};
-  var adEvents = {};
-  var eventListeners = {};
   var adPaused = false;
+  var pausedTime = 0;
+  var pauseStartTime = 0;
+  var adProperties,
+      adInterval,
+      adContainer,
+      adEvents = {},
+      eventListeners = {},
+      adVolume = 1,
+      adElements = {},
+      triggerEvent = function (eventName) {
+          if (eventName in eventListeners) {
+              for (var i = 0; i < eventListeners[eventName].length; i++) {
+                  eventListeners[eventName][i]();
+              }
+          }
+      };
 
-  // Define VPAID events
   var VPAID_EVENTS = {
     AdStarted: "AdStarted",
     AdStopped: "AdStopped",
@@ -34,135 +46,248 @@ var getVPAIDAd = function () {
     AdLog: "AdLog"
   };
 
-  // Register event callbacks
-  var triggerEvent = function (eventName) {
-    if (eventName in eventListeners) {
-      for (var i = 0; i < eventListeners[eventName].length; i++) {
-        eventListeners[eventName][i]();
-      }
+  function initializeAd() {
+    var intervalId = setInterval(function () {
+        var activeElement = document.activeElement;
+        if (activeElement && activeElement.tagName === "IFRAME") {
+            clearInterval(intervalId);
+            if (getClosestParentWithId(activeElement.parentNode).id === "on-c") {
+                handleAdClickThru();
+            }
+        }
+    }, 100);
+
+    var adClicked = false;
+
+    try {
+        document.querySelector("iframe").addEventListener("load", function () {
+            this.blur();
+        });
+    } catch (e) {}
+
+    function handleAdClickThru() {
+        if (!adClicked) {
+            clearInterval(intervalId);
+            adClicked = true;
+            triggerEvent("AdClickThru");
+        }
     }
+
+    document.querySelector("#on-c").addEventListener("click", function () {
+        handleAdClickThru();
+    });
+  }
+
+  function getClosestParentWithId(element) {
+      return element.id !== "on-c" ? element.closest("#on-c") : element;
+  }
+
+  function getDynamicVideoElement() {
+    return document.getElementById('dynamic-video');
+  }
+
+  adEvents.handshakeVersion = function (version) {
+      return "2.0";
   };
 
-  // Init Ad function
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     adProperties = {
-      slot: environmentVars.slot,
-      videoSlot: environmentVars.videoSlot,
-      width: width,
-      height: height,
-      viewMode: viewMode,
-      desiredBitrate: desiredBitrate,
-      duration: 30,
-      volume: 1,
-      skippableState: false,
-      expanded: false,
-      currentTime: 0,
-      remainingTime: 30,
-      linear: true
+        slot: environmentVars.slot,
+        videoSlot: environmentVars.videoSlot,
+        width: width,
+        height: height,
+        viewMode: viewMode,
+        expanded: false,
+        skippableState: false,
+        duration: 30,
+        skipDuration: 5,
+        startTime: 0,
+        ready: false
     };
-
-    if (!adProperties.videoSlot) {
-      adProperties.videoSlot = document.createElement('video');
-      adProperties.slot.appendChild(adProperties.videoSlot);
-    }
-
-    adProperties.videoSlot.setAttribute('id', 'dynamic-video');
-    adProperties.videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/36ea573d1eb6efdd8d03fb2ce4b08ac6153e44bf09bda98e404418b54b2c7c97_video_large');
-    adProperties.videoSlot.addEventListener('timeupdate', adEvents.onTimeUpdate.bind(this), false);
-    adProperties.videoSlot.addEventListener('loadedmetadata', adEvents.onLoadedMetadata.bind(this), false);
-    adProperties.videoSlot.addEventListener('ended', adEvents.stopAd.bind(this), false);
-
-    adProperties.slot.addEventListener('click', function () {
-      adEvents.onAdClickThru('', '0');
-    }, false);
-
-    triggerEvent(VPAID_EVENTS.AdLoaded);
-  };
-
-  adEvents.onLoadedMetadata = function(event) {
-    adProperties.duration = event.target.duration;
-    adProperties.remainingTime = event.target.duration;
-    adEvents.onAdDurationChange();
-  };
-
-  adEvents.onTimeUpdate = function () {
-    var percentPlayed = adProperties.videoSlot.currentTime * 100.0 / adProperties.videoSlot.duration;
-    adProperties.remainingTime = adProperties.videoSlot.duration - adProperties.videoSlot.currentTime;
+    initializeAdContainer();
   };
 
   adEvents.startAd = function () {
-    adProperties.videoSlot.play();
-    triggerEvent(VPAID_EVENTS.AdStarted);
+    if (!adProperties.ready) {
+        return setTimeout(adEvents.startAd, 250);
+    }
+
+    function createAndRenderVideo() {
+      var videoElement = str_to_element('<video width="auto" height="100%" playsinline id="dynamic-video" style="position: relative;margin:0 auto;" src="https://cdn1.decide.co/uploads/36ea573d1eb6efdd8d03fb2ce4b08ac6153e44bf09bda98e404418b54b2c7c97_video_large"></video>');
+
+      videoElement.addEventListener('loadedmetadata', function () {
+        var videoDuration = videoElement.duration;
+        if (typeof adProperties !== 'undefined') {
+            adProperties.duration = videoDuration;
+            adEvents.onAdDurationChange();
+        }
+      });
+
+      videoElement.addEventListener('loadeddata', function() {
+        videoElement.play().catch(function(error) {});
+      });
+
+      videoElement.addEventListener('error', function(e) {
+        console.log('Error playing video: ' + e);
+      });
+
+      var referenceDiv = document.getElementById('on-c');
+      if (referenceDiv) {
+        referenceDiv.parentNode.insertBefore(videoElement, referenceDiv.nextSibling);
+      } else {
+        console.log('Reference div not found');
+      }
+    }
+    createAndRenderVideo();
+
+    function str_to_element (str_elem) {
+      var elem = document.createElement('div');
+      elem.innerHTML = str_elem;
+      return elem.firstChild;
+    }
+
+    adProperties.startTime = getCurrentTime();
+    adInterval = setInterval(updateAd, 500);
+    triggerEvent("AdStarted");
   };
 
   adEvents.stopAd = function () {
-    adProperties.ready = false;
-    setTimeout(function () {
-      triggerEvent(VPAID_EVENTS.AdStopped);
-    }, 75);
-  };
-
-  adEvents.onAdClickThru = function (url, id, playerHandles) {
-    triggerEvent(VPAID_EVENTS.AdClickThru);
-  };
-
-  adEvents.onAdDurationChange = function () {
-    triggerEvent(VPAID_EVENTS.AdDurationChange);
+      adProperties.ready = false;
+      clearTimeout(adInterval);
+      if (adContainer.parentNode) {
+          adContainer.parentNode.removeChild(adContainer);
+      }
+      setTimeout(function () {
+          triggerEvent("AdStopped");
+      }, 100);
   };
 
   adEvents.resizeAd = function (width, height, viewMode) {
-    adProperties.width = width;
-    adProperties.height = height;
-    adProperties.viewMode = viewMode;
-    triggerEvent(VPAID_EVENTS.AdSizeChange);
+      adProperties.width = width;
+      adProperties.height = height;
+      adProperties.viewMode = viewMode;
+      updateAdContainer();
+      triggerEvent("AdSizeChange");
   };
 
   adEvents.pauseAd = function () {
-    adProperties.videoSlot.pause();
+    var dynamicVideo = getDynamicVideoElement();
+    if (dynamicVideo) {
+        dynamicVideo.pause();
+    }
+    pauseStartTime = getCurrentTime();
     adPaused = true;
-    triggerEvent(VPAID_EVENTS.AdPaused);
+    triggerEvent("AdPaused");
   };
 
   adEvents.resumeAd = function () {
-    adProperties.videoSlot.play();
+    var dynamicVideo = getDynamicVideoElement();
+    if (dynamicVideo) {
+        dynamicVideo.play().catch(function(error) {});
+    }
+    if (adPaused) {
+        pausedTime += getCurrentTime() - pauseStartTime;
+    } 
     adPaused = false;
-    triggerEvent(VPAID_EVENTS.AdPlaying);
+    triggerEvent("AdPlaying");
   };
 
-  adEvents.getAdVolume = function () {
-    return adProperties.volume;
+  adEvents.onAdImpression = function () {
+    triggerEvent(VPAID_EVENTS.AdImpression);
   };
 
-  adEvents.setAdVolume = function (value) {
-    adProperties.volume = value;
-    adProperties.videoSlot.volume = value;
-    triggerEvent(VPAID_EVENTS.AdVolumeChange);
+  adEvents.onAdVolumeChange = function () {
+      console.log('On Ad Volume changed');
+      triggerEvent(VPAID_EVENTS.AdVolumeChange);
   };
 
-  adEvents.getAdLinear = function () {
-    return adProperties.linear;
-  };
-
-  adEvents.getAdSkippableState = function () {
-    return adProperties.skippableState;
-  };
-
-  adEvents.getAdRemainingTime = function () {
-    return adProperties.remainingTime;
+  adEvents.onAdVideoStart = function () {
+    triggerEvent(VPAID_EVENTS.AdVideoStart);
   };
 
   adEvents.expandAd = function () {
-    adProperties.expanded = true;
-    triggerEvent(VPAID_EVENTS.AdExpandedChange);
+      adProperties.expanded = true;
+      triggerEvent("AdExpanded");
   };
 
   adEvents.collapseAd = function () {
-    adProperties.expanded = false;
-    triggerEvent(VPAID_EVENTS.AdExpandedChange);
+      adProperties.expanded = false;
+  };
+
+  adEvents.skipAd = function () {
+      if (adProperties.skippableState) {
+          triggerEvent("AdSkipped");
+      }
+  };
+
+  adEvents.getAdLinear = function () {
+      return true;
+  };
+
+  adEvents.getAdWidth = function () {
+      return adProperties.width;
+  };
+
+  adEvents.getAdHeight = function () {
+      return adProperties.height;
+  };
+
+  adEvents.getAdExpanded = function () {
+      return adProperties.expanded;
+  };
+
+  adEvents.getAdSkippableState = function () {
+      return adProperties.skippableState;
+  };
+
+  adEvents.getAdRemainingTime = function () {
+      var remainingTime = adProperties.duration;
+      if (adProperties.startTime) {
+          remainingTime -= Math.floor(getCurrentTime() - adProperties.startTime);
+      }
+      return remainingTime;
   };
 
   adEvents.getAdDuration = function () {
     return adProperties.duration;
+  };
+
+  adEvents.onAdDurationChange = function () {
+      triggerEvent(VPAID_EVENTS.AdDurationChange);
+  };
+
+  adEvents.getAdVolume = function () {
+    return adVolume;
+    console.log('Getting volume: ' + adVolume);
+  };
+
+  adEvents.setAdVolume = function (volume) {
+    console.log('Setting volume to: ' + volume);
+    var oldVolume = adVolume;
+    adVolume = volume;
+
+    if (adVolume !== oldVolume) {
+      if (adProperties.videoSlot) {
+          adProperties.videoSlot.volume = adVolume;
+          console.log('Ad properties volume: ' + adProperties.videoSlot.volume);
+      }
+
+      var dynamicVideo = document.getElementById('dynamic-video');
+      if (dynamicVideo) {
+          dynamicVideo.volume = adVolume;
+          console.log('Volume: ' + dynamicVideo.volume);
+      }
+      console.log('adVolume changed');
+      triggerEvent(VPAID_EVENTS.AdVolumeChange);
+    }
+  };
+
+  adEvents.getAdCompanions = function () {
+      return "";
+  };
+
+  adEvents.getAdIcons = function () {
+      return "";
   };
 
   adEvents.subscribe = function (callback, eventName, context) {
@@ -174,36 +299,106 @@ var getVPAIDAd = function () {
   };
 
   adEvents.unsubscribe = function (eventName) {
-    eventListeners[eventName] = [];
+      eventListeners[eventName] = [];
   };
 
-  adEvents.getAdWidth = function () {
-    return adProperties.width;
-  };
+  function getCurrentTime() {
+      return new Date().getTime() / 1000;
+  }
 
-  adEvents.getAdHeight = function () {
-    return adProperties.height;
-  };
+  function updateAdContainer() {}
 
-  adEvents.getAdExpanded = function () {
-    return adProperties.expanded;
-  };
-
-  adEvents.skipAd = function () {
-    if (adProperties.skippableState) {
-      triggerEvent(VPAID_EVENTS.AdSkipped);
+  function initializeAdContainer() {
+    var container = document.createElement("div");
+    container.style.position = "relative";
+    container.style.height = "100%";
+    if ((window.innerHeight || document.documentElement.clientHeight) >= 240) {
+        container.style.display = "flex";
     }
-  };
+    container.style.background = "#000";
+    container.style.font = "normal 14px/1.15 sans-serif";
+    container.style.boxSizing = "border-box";
 
-  adEvents.getAdIcons = function () {
-    return "";
-  };
+    if (window.top !== window) {
+        window.ldAdInit = window.ldAdInit || [];
+        window.ldAdInit.push({ size: [0, 0], id: "ld-3701-3915" });
+    }
 
-  adEvents.getAdCompanions = function () {
-    return "";
-  };
+    container.innerHTML = '<div id="on-c" style="box-sizing:border-box;width:100%;padding:0px;height:100%;position:absolute;opacity:0;z-index:999"><div id="ld-3701-3915" data-ld-vpaid="1" style="width:100%"></div></div>' + getSkipButtonHtml();
+
+    var adSlot = container.childNodes[0].childNodes[0];
+    var adImpressionInterval = setInterval(function () {
+        if (adSlot.offsetHeight) {
+            setTimeout(function () {
+                triggerEvent("AdImpression");
+            }, 1000);
+            var adLinks = adSlot.querySelectorAll("a");
+            for (var i = 0; i < adLinks.length; i++) {
+                adLinks[i].onclick = function () {
+                    triggerEvent("AdClickThru");
+                };
+            }
+            clearInterval(adImpressionInterval);
+        }
+    }, 500);
+
+    adElements.skip = container.querySelectorAll("#skip")[0];
+    adElements.remaining = container.querySelectorAll("#remaining")[0];
+    adElements.links = container.querySelectorAll("a");
+
+    for (var i = 0; i < adElements.links.length; i++) {
+        adElements.links[i].onclick = function () {
+            triggerEvent("AdClickThru");
+        };
+    }
+
+    adProperties.slot.appendChild(container);
+    adContainer = container;
+
+    var styleElement = document.createElement("style");
+    styleElement.type = "text/css";
+    styleElement.appendChild(document.createTextNode(""));
+    document.head.appendChild(styleElement);
+
+    adProperties.ready = true;
+    triggerEvent("AdLoaded");
+    initializeAd();
+  }
+
+  function getSkipButtonHtml() {
+    return (
+      '<div id="skip" style="user-select: none;cursor:pointer;color:#ffffff;background-color:#000000a0;padding:8px 10px;border:1px solid #ffffff4d;white-space:nowrap;position:absolute;bottom:5%;right:15px;z-index:1000;border-radius:20px;">Skip in <span id="remaining">' +
+      adProperties.skipDuration
+    );
+  }
+
+  function updateAd() {
+    if (adPaused) {
+        return;
+    }
+    var elapsedTime = getCurrentTime() - adProperties.startTime - pausedTime;
+    var remainingTime = Math.floor(adProperties.skipDuration - elapsedTime);
+    if (remainingTime > 0) {
+        adElements.remaining.innerHTML = remainingTime;
+    } else if (adElements.remaining) {
+        if (adElements.remaining.parentNode) {
+            adElements.remaining.parentNode.removeChild(adElements.remaining);
+        }
+        adElements.remaining = null;
+        adElements.skip.innerHTML = "Close Ad";
+        adElements.skip.style.color = "#FFF";
+        adElements.skip.style.backgroundColor = "#000000cc";
+        adElements.skip.style.borderColor = "#FFF";
+        adElements.skip.style.fontWeight = "bold";
+        adElements.skip.onclick = function () {
+            triggerEvent("AdUserClose");
+            adEvents.stopAd();
+        };
+    } else if (elapsedTime > adProperties.duration) {
+        adEvents.stopAd();
+    }
+  }
 
   return adEvents;
 };
-
 window.getVPAIDAd = getVPAIDAd;
