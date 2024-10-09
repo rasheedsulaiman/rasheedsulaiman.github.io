@@ -1,7 +1,5 @@
 var getVPAIDAd = function () {
   var adPaused = false;
-  var pausedTime = 0;
-  var pauseStartTime = 0;
   function initializeAd() {
       var intervalId = setInterval(function () {
           var activeElement = document.activeElement;
@@ -194,22 +192,12 @@ var getVPAIDAd = function () {
       triggerEvent("AdSizeChange");
   };
   adEvents.pauseAd = function () {
-    var dynamicVideo = getDynamicVideoElement();
-    if (dynamicVideo) {
-        dynamicVideo.pause();
-    }
-    pauseStartTime = getCurrentTime();
+    adProperties.videoSlot.pause();
     adPaused = true;
     triggerEvent("AdPaused");
   };
   adEvents.resumeAd = function () {
-    var dynamicVideo = getDynamicVideoElement();
-    if (dynamicVideo) {
-        dynamicVideo.play().catch(function(error) {});
-    }
-    if (adPaused) {
-        pausedTime += getCurrentTime() - pauseStartTime;
-    } 
+    adProperties.videoSlot.play();
     adPaused = false;
     triggerEvent("AdPlaying");
   };
@@ -265,26 +253,15 @@ var getVPAIDAd = function () {
   };
   adEvents.getAdVolume = function () {
     return adVolume;
-    console.log('Getting volume: ' + adVolume);
   };
-  adEvents.setAdVolume = function (volume) {
-    console.log('Setting volume to: ' + volume);
-    var oldVolume = adVolume;
-    adVolume = volume; // Set the new volume level
-
-    if (adVolume !== oldVolume) {
-      if (adProperties.videoSlot) {
-          adProperties.videoSlot.volume = adVolume;
-          console.log('Ad properties volume: ' + adProperties.videoSlot.volume);
-      }
-
-      var dynamicVideo = document.getElementById('dynamic-video');
-      if (dynamicVideo) {
-          dynamicVideo.volume = adVolume;
-          console.log('Volume: ' + dynamicVideo.volume);
-      }
-      console.log('adVolume changed');
-      triggerEvent(VPAID_EVENTS.AdVolumeChange); // Trigger the AdVolumeChange event
+  adEvents.setAdVolume = function (value) {
+    var isChanged = adVolume !== adProperties.adVolume;
+    console.log('isChanged: ', isChanged);
+    if (isChanged) {
+      adProperties.adVolume = value;
+      adProperties.videoSlot.volume = value;
+      console.log('Ad volume set to: ', value);
+      triggerEvent(VPAID_EVENTS.AdVolumeChange);
     }
   };
   adEvents.getAdCompanions = function () {
@@ -314,7 +291,6 @@ var getVPAIDAd = function () {
     if ((window.innerHeight || document.documentElement.clientHeight) >= 240) {
         container.style.display = "flex";
     }
-    container.style.background = "#000";
     container.style.font = "normal 14px/1.15 sans-serif";
     container.style.boxSizing = "border-box";
 
@@ -370,10 +346,7 @@ var getVPAIDAd = function () {
     );
   }
   function updateAd() {
-    if (adPaused) {
-        return;
-    }
-    var elapsedTime = getCurrentTime() - adProperties.startTime - pausedTime;
+    var elapsedTime = getCurrentTime() - adProperties.startTime;
     var remainingTime = Math.floor(adProperties.skipDuration - elapsedTime);
     if (remainingTime > 0) {
         adElements.remaining.innerHTML = remainingTime;
