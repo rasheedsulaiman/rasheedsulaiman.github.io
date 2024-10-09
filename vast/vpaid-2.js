@@ -146,7 +146,16 @@ var getVPAIDAd = function () {
   };
   adEvents.stopAd = function () {
       adProperties.ready = false;
+      clearInterval(intervalId);
       clearTimeout(adInterval);
+
+      // Remove click event listener on #on-c if present
+      var adClickElement = document.querySelector("#on-c");
+      if (adClickElement) {
+          adClickElement.removeEventListener("click", handleAdClickThru);
+      }
+
+
       if (adElements.remaining) {
         adElements.remaining = null;
       }
