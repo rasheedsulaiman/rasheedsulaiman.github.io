@@ -1,4 +1,4 @@
-var LinearAd = function() {
+var getVPAIDAd = function() {
   // The slot is the div element on the main page that the ad is supposed to
   // occupy.
   this._slot = null;
@@ -69,134 +69,134 @@ var LinearAd = function() {
   this._isStarted = false;
   this._isPaused = false;
 };
-LinearAd.prototype.doContentComplete = function() {
+adEvents.doContentComplete = function() {
   console.log('VP > contentEndedListener executed');
 };
-LinearAd.prototype.onAdLoaded = function() {
+adEvents.onAdLoaded = function() {
   if (this.VPAID_EVENTS.AdLoaded in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdLoaded]();
   }
 };
-LinearAd.prototype.onAdStarted = function() {
+adEvents.onAdStarted = function() {
   if (this.VPAID_EVENTS.AdStarted in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdStarted]();
   }
 };
-LinearAd.prototype.onAdVideoStart = function() {
+adEvents.onAdVideoStart = function() {
   if (this.VPAID_EVENTS.AdVideoStart in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdVideoStart]();
   }
 };
-LinearAd.prototype.onAdImpression = function() {
+adEvents.onAdImpression = function() {
   if (this.VPAID_EVENTS.AdImpression in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdImpression]();
   }
 };
-LinearAd.prototype.onAdClickThru = function(url, id, playerHandles) {
+adEvents.onAdClickThru = function(url, id, playerHandles) {
   if (this.VPAID_EVENTS.AdClickThru in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdClickThru](url, id, playerHandles);
   }
 };
-LinearAd.prototype.onAdVideoFirstQuartile = function() {
+adEvents.onAdVideoFirstQuartile = function() {
   if (this.VPAID_EVENTS.AdVideoFirstQuartile in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdVideoFirstQuartile]();
   }
 };
-LinearAd.prototype.onAdVideoMidpoint = function() {
+adEvents.onAdVideoMidpoint = function() {
   if (this.VPAID_EVENTS.AdVideoMidpoint in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdVideoMidpoint]();
   }
 };
-LinearAd.prototype.onAdVideoThirdQuartile = function() {
+adEvents.onAdVideoThirdQuartile = function() {
   if (this.VPAID_EVENTS.AdVideoThirdQuartile in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdVideoThirdQuartile]();
   }
 };
-LinearAd.prototype.onAdVideoComplete = function() {
+adEvents.onAdVideoComplete = function() {
   console.log('VP > onAdVideoComplete');
   if (this.VPAID_EVENTS.AdVideoComplete in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdVideoComplete]();
   }
 };
-LinearAd.prototype.onAdPaused = function() {
+adEvents.onAdPaused = function() {
   if (this.VPAID_EVENTS.AdPaused in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdPaused]();
   }
 };
-LinearAd.prototype.onAdPlaying = function() {
+adEvents.onAdPlaying = function() {
   if (this.VPAID_EVENTS.AdPlaying in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdPlaying]();
   }
 };
-LinearAd.prototype.onAdVolumeChange = function() {
+adEvents.onAdVolumeChange = function() {
   if (this.VPAID_EVENTS.AdVolumeChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdVolumeChange]();
   }
 };
-LinearAd.prototype.onAdStopped = function() {
+adEvents.onAdStopped = function() {
   if (this.VPAID_EVENTS.AdStopped in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdStopped]();
   }
 };
-LinearAd.prototype.onAdSkipped = function() {
+adEvents.onAdSkipped = function() {
   if (this.VPAID_EVENTS.AdSkipped in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdSkipped]();
   }
 };
-LinearAd.prototype.onAdDurationChange = function() {
+adEvents.onAdDurationChange = function() {
   if (this.VPAID_EVENTS.AdDurationChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdDurationChange]();
   }
 };
-LinearAd.prototype.onAdInteraction = function() {
+adEvents.onAdInteraction = function() {
   if (this.VPAID_EVENTS.AdInteraction in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdInteraction]();
   }
 };
-LinearAd.prototype.onAdLinearChange = function() {
+adEvents.onAdLinearChange = function() {
   if (this.VPAID_EVENTS.AdLinearChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdLinearChange]();
   }
 };
-LinearAd.prototype.onAdSkippableStateChange = function() {
+adEvents.onAdSkippableStateChange = function() {
   if (this.VPAID_EVENTS.AdSkippableStateChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdSkippableStateChange]();
   }
 };
-LinearAd.prototype.onAdRemainingTimeChange = function() {
+adEvents.onAdRemainingTimeChange = function() {
   if (this.VPAID_EVENTS.AdRemainingTimeChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdRemainingTimeChange]();
   }
 }
-LinearAd.prototype.onAdUserClose = function() {
+adEvents.onAdUserClose = function() {
   if (this.VPAID_EVENTS.AdUserClose in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdUserClose]();
   }
 };
-LinearAd.prototype.onAdLog = function(message) {
+adEvents.onAdLog = function(message) {
   if (this.VPAID_EVENTS.AdLog in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdLog](message);
   }
 };
-LinearAd.prototype.onAdSizeChange = function() {
+adEvents.onAdSizeChange = function() {
   if (this.VPAID_EVENTS.AdSizeChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdSizeChange]();
   }
 };
-LinearAd.prototype.onAdExpandedChange = function() {
+adEvents.onAdExpandedChange = function() {
   if (this.VPAID_EVENTS.AdExpandedChange in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdExpandedChange]();
   }
 };
-LinearAd.prototype.onAdError = function(message) {
+adEvents.onAdError = function(message) {
   if (this.VPAID_EVENTS.AdError in this._eventCallbacks) {
       this._eventCallbacks[this.VPAID_EVENTS.AdError](message);
   }
 };
-LinearAd.prototype.handshakeVersion = function(version) {
+adEvents.handshakeVersion = function(version) {
   return ('2.0');
 };
-LinearAd.prototype.timeUpdateHandler = function() {
+adEvents.timeUpdateHandler = function() {
   if (this._nextQuartileIndex >= this._quartileEvents.length) {
       return;
   }
@@ -211,7 +211,7 @@ LinearAd.prototype.timeUpdateHandler = function() {
       this._attributes.remainingTime = this._videoSlot.duration - this._videoSlot.currentTime;
   }
 };
-LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
+adEvents.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
 
   console.log('initAd', width, height, viewMode, desiredBitrate, creativeData, environmentVars);
 
@@ -274,17 +274,17 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
 
   this.onAdLoaded();
 };
-LinearAd.prototype.startAd = function() {
+adEvents.startAd = function() {
   console.log('VP > startAd');
 
   this._videoSlot.play();
   //this._videoSlot.load();
   this.onAdStarted();
 };
-LinearAd.prototype.getAdVolume = function() {
+adEvents.getAdVolume = function() {
   return this._attributes.volume;
 };
-LinearAd.prototype.setAdVolume = function(value) {
+adEvents.setAdVolume = function(value) {
   var isChanged = value !== this._attributes.volume;
   if(isChanged) {
       this._attributes.volume = value;
@@ -292,24 +292,24 @@ LinearAd.prototype.setAdVolume = function(value) {
       this.onAdVolumeChange();
   }
 };
-LinearAd.prototype.resumeAd = function() {
+adEvents.resumeAd = function() {
   this._videoSlot.play();
   this._isPaused = !1;
   this.onAdPlaying();
 };
-LinearAd.prototype.pauseAd = function() {
+adEvents.pauseAd = function() {
   this._videoSlot.pause();
   this._isPaused = !0;
   this.onAdPaused();
 };
-LinearAd.prototype.resizeAd = function(width, height, viewMode) {
+adEvents.resizeAd = function(width, height, viewMode) {
   console.log('VP > resizeAd', width, height, viewMode);
   this._attributes.width = width;
   this._attributes.height = height;
   this._attributes.viewMode = viewMode;
   this.onAdSizeChange();
 };
-LinearAd.prototype.stopAd = function() {
+adEvents.stopAd = function() {
   console.log('VP > stopAd');
   this.log('Stopping ad');
   var that = this;
@@ -318,55 +318,55 @@ LinearAd.prototype.stopAd = function() {
       that.onAdStopped();
   }, 75);
 };
-LinearAd.prototype.getAdExpanded = function() {
+adEvents.getAdExpanded = function() {
   return this._attributes.expanded;
 };
-LinearAd.prototype.collapseAd = function() {
+adEvents.collapseAd = function() {
   this._attributes.expanded = false;
   this.onAdExpandedChange();
 };
-LinearAd.prototype.expandAd = function() {
+adEvents.expandAd = function() {
   this._attributes.expanded = true;
   this.onAdExpandedChange();
 };
-LinearAd.prototype.getAdSkippableState = function() {
+adEvents.getAdSkippableState = function() {
   return this._attributes.skippableState;
 };
-LinearAd.prototype.skipAd = function() {
+adEvents.skipAd = function() {
   this.onAdSkipped();
 };
-LinearAd.prototype.subscribe = function(callback, eventName, context) {
+adEvents.subscribe = function(callback, eventName, context) {
   this.log('Subscribe ' + eventName);
   var givenCallback = callback.bind(context);
   this._eventCallbacks[eventName] = givenCallback;
 };
-LinearAd.prototype.unsubscribe = function(eventName) {
+adEvents.unsubscribe = function(eventName) {
   this.log('unsubscribe ' + eventName);
   this._eventCallbacks[eventName] = null;
 };
-LinearAd.prototype.getAdWidth = function() {
+adEvents.getAdWidth = function() {
   return this._attributes.width;
 };
-LinearAd.prototype.getAdHeight = function() {
+adEvents.getAdHeight = function() {
   return this._attributes.height;
 };
-LinearAd.prototype.getAdRemainingTime = function() {
+adEvents.getAdRemainingTime = function() {
   return this._videoSlot.duration - this._videoSlot.currentTime; //this._attributes.remainingTime;
 };
-LinearAd.prototype.getAdDuration = function() {
+adEvents.getAdDuration = function() {
   //console.log('VP > getAdDuration', this._attributes.duration);
   return this._attributes.duration;
 };
-LinearAd.prototype.getAdCompanions = function() {
+adEvents.getAdCompanions = function() {
   return [];
 };
-LinearAd.prototype.getAdIcons = function() {
+adEvents.getAdIcons = function() {
   return this._attributes.icons;
 };
-LinearAd.prototype.getAdLinear = function() {
+adEvents.getAdLinear = function() {
   return this._attributes.linear;
 };
-LinearAd.prototype.log = function(message) {
+adEvents.log = function(message) {
   console.log(message);
 };
 
