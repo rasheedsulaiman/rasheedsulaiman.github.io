@@ -150,68 +150,17 @@ var getVPAIDAd = function () {
   };
   
   adEvents.stopAd = function () {
-    console.log("stopAd function triggered");
+    adProperties.ready = false; // Set the ad as not ready
+    clearInterval(adInterval); // Clear the ad interval
+    clearInterval(intervalId); // Clear the interval ID
 
-    // Step 1: Safely clear all intervals
-    if (typeof intervalId !== 'undefined') {
-        clearInterval(intervalId);
-        console.log("Cleared intervalId");
+    if (adEvents.videoSlot) {
+      adProperties.videoSlot.pause(); // Pause the video slot
+      adProperties.videoSlot.remove(); // Remove the video slot
     }
 
-    if (typeof adInterval !== 'undefined') {
-        clearTimeout(adInterval);
-        console.log("Cleared adInterval");
-    }
-
-    // Step 2: Remove click event listener on #on-c if present
-    var adClickElement = document.querySelector("#on-c");
-    if (adClickElement) {
-        adClickElement.removeEventListener("click", handleAdClickThru);
-        console.log("Removed click listener from #on-c");
-    }
-
-    // Step 3: Remove video slot if present and clear playback state
-    if (adProperties && adProperties.videoSlot) {
-        console.log("Found videoSlot:", adProperties.videoSlot);
-
-        // Pause and completely reset the video slot before removal
-        try {
-            adProperties.videoSlot.pause();
-            console.log("Paused videoSlot");
-
-            adProperties.videoSlot.src = ""; // Reset the source
-            console.log("Cleared videoSlot src attribute");
-
-            adProperties.videoSlot.removeAttribute('src'); // Remove src attribute for cleanup
-            adProperties.videoSlot.load();  // Reload the element to apply changes
-            console.log("Reloaded videoSlot to reset state");
-
-            
-            adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
-            console.log("Removed videoSlot from DOM");
-
-        } catch (e) {
-            console.log("Error removing videoSlot:", e);
-        }
-        adProperties.videoSlot = null; // Clear reference
-    } else {
-        console.log("No videoSlot found in adProperties");
-    }
-
-    // Step 4: Remove the main ad container
-    if (adContainer && adContainer.parentNode) {
-        console.log("Removing adContainer:", adContainer);
-        adContainer.parentNode.removeChild(adContainer);
-        console.log("Ad container removed from DOM");
-    } else {
-        console.log("Ad container not found in DOM");
-    }
-
-    // Step 5: Confirm that all ad elements are removed
-    if (!document.querySelector("#on-c") && !document.querySelector("video#dynamic-video")) {
-        console.log("All ad elements successfully removed");
-    } else {
-        console.log("Some ad elements still remain in the DOM");
+    if (adContainer.parentNode) {
+      adContainer.parentNode.removeChild(adContainer); // Remove the ad container
     }
 
     // Step 6: Trigger the AdStopped event
