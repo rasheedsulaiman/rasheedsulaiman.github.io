@@ -1,11 +1,6 @@
 var LinearAd = function() {
-  // The slot is the div element on the main page that the ad is supposed to
-  // occupy.
-  this._slot = null;
-  // The video slot is the video object that the creative can use to render the
-  // video element it might have.
-  this._videoSlot = null;
-  // VPAID events
+  this._slot = null; // The slot is the div element on the main page that the ad is supposed to occupy.
+  this._videoSlot = null; // The video slot is the video object that the creative can use to render the video element it might have.
   this.VPAID_EVENTS = {
       AdStarted: "AdStarted",
       AdStopped: "AdStopped",
@@ -34,9 +29,7 @@ var LinearAd = function() {
       AdError: "AdError",
       AdLog: "AdLog"
   };
-  // An object containing all registered events.  These events are all
-  // callbacks from the vpaid ad.
-  this._eventCallbacks = {};
+  this._eventCallbacks = {}; // An object containing all registered events.  These events are all callbacks from the vpaid ad.
   // A list of attributes getable and setable.
   this._attributes = {
       companions : "",
@@ -211,6 +204,8 @@ LinearAd.prototype.timeUpdateHandler = function() {
       this._attributes.remainingTime = this._videoSlot.duration - this._videoSlot.currentTime;
   }
 };
+
+
 LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
 
   console.log('initAd', width, height, viewMode, desiredBitrate, creativeData, environmentVars);
@@ -255,19 +250,6 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
 
   this._videoSlot.addEventListener('ended', this.stopAd.bind(this), false);
 
-  // AdClickThru
-  /*
-  this._slot.addEventListener('click', function(event) {
-      //var targetUrl = 'http://192.168.1.111/';
-      //var opener = window.open(targetUrl, "_blank");
-      //void 0 !== opener ? opener.focus() : window.location.href = targetUrl
-      if(!that._isPaused) {
-          that.pauseAd();
-      } else {
-          that.resumeAd();
-      }
-  }, false);
-  */
   this._slot.addEventListener('click', function() {
       that.onAdClickThru('', '0');
   }, false);
@@ -369,7 +351,6 @@ LinearAd.prototype.getAdLinear = function() {
 LinearAd.prototype.log = function(message) {
   console.log(message);
 };
-
 function getVPAIDAd() {
   //console.log('VP > getVPAIDAd');
   return new LinearAd;
