@@ -116,7 +116,7 @@ var getVPAIDAd = function () {
     function createAndRenderVideo() {
 
       // Define the video HTML with inline styles
-      var videoElement = str_to_element('<video width="auto" height="100%" playsinline id="dynamic-video" style="position: relative;margin:0 auto;" src="https://cdn1.decide.co/uploads/36ea573d1eb6efdd8d03fb2ce4b08ac6153e44bf09bda98e404418b54b2c7c97_video_large"></video>');
+      var videoElement = str_to_element('<video width="auto" height="100%" playsinline id="dynamic-video" style="position: relative;margin:0 auto;" src="https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large"></video>');
 
       // Add an event listener to get the video duration when metadata is loaded
       videoElement.addEventListener('loadedmetadata', function () {
