@@ -148,25 +148,20 @@ var getVPAIDAd = function () {
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
   adEvents.stopAd = function () {
-      adProperties.ready = false;
-      clearTimeout(adInterval);
-      
-
-      if (adContainer && adContainer.parentNode) {
-        console.log('Ad container found. Removing...');
-        adContainer.parentNode.removeChild(adContainer);
-        adContainer = null;
-        console.log('Ad container removed');
-      } else {
-        console.log('Ad container not found');
-      } 
-      console.log('After removal, adContainer: ', adContainer);
-
-      setTimeout(function () {
-        console.log('Triggerring AdStopped event');
-          triggerEvent("AdStopped");
-      }, 100);
+    adProperties.ready = false;
+    clearTimeout(adInterval);
+    console.log("Stopping the ad...");
+  
+    if (adContainer && adContainer.parentNode) {
+      console.log("Removing ad container.");
+      adContainer.parentNode.removeChild(adContainer);
+    }
+  
+    // Trigger the AdStopped event immediately
+    triggerEvent("AdStopped");
+    console.log("Ad stopped successfully.");
   };
+  
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
       adProperties.height = height;
@@ -175,22 +170,17 @@ var getVPAIDAd = function () {
       triggerEvent("AdSizeChange");
   };
   adEvents.pauseAd = function () {
-    if (adProperties.videoSlot) {
-      adProperties.videoSlot.pause();
-    }
     adPaused = true;
     triggerEvent("AdPaused");
-    console.log('Ad paused, updating state');
+    console.log('Ad paused');
   };
+  
   adEvents.resumeAd = function () {
-    if (adProperties.videoSlot) {
-      adProperties.videoSlot.play();
-    }
     adPaused = false;
-    adProperties.startTime = getCurrentTime() - (adProperties.duration - adProperties.remainingTime); // Update the start time
     triggerEvent("AdPlaying");
-    console.log('Ad resumed, updating state');
+    console.log('Ad resumed');
   };
+  
   adEvents.onAdImpression = function () {
     triggerEvent(VPAID_EVENTS.AdImpression);
   };
@@ -356,10 +346,15 @@ var getVPAIDAd = function () {
         adElements.skip.style.backgroundColor = "#000000cc";
         adElements.skip.style.borderColor = "#FFF";
         adElements.skip.style.fontWeight = "bold";
+        let skipButtonClicked = false;
         adElements.skip.onclick = function () {
-            triggerEvent("AdUserClose");
+          if (!skipButtonClicked) {
+            skipButtonClicked = true;
+            triggerEvent("AdSkipped");
             adEvents.stopAd();
+          }
         };
+
     } else if (adProperties.remainingTime <= 0) {
         adEvents.stopAd();
     }
