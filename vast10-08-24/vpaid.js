@@ -237,9 +237,10 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   var that = this;
   if(this._videoSlot == null) {
       this._videoSlot = document.createElement('video');
-      this._videoSlot.id = 'dynamic-video';
       this._slot.appendChild(this._videoSlot);
   }
+
+  this._videoSlot.setAttribute('id', 'dynamic-video');
 
   this._videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/36ea573d1eb6efdd8d03fb2ce4b08ac6153e44bf09bda98e404418b54b2c7c97_video_large');
 
