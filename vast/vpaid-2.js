@@ -117,6 +117,14 @@ var getVPAIDAd = function () {
         adProperties.videoSlot.play().catch(function(error) {
           console.log('Error playing video: ' + error);
         });
+
+        adProperties.videoSlot.addEventListener('loadedmetadata', function () {
+          var videoDuration = adProperties.videoSlot.duration;
+          if (typeof adProperties !== 'undefined') {
+            adProperties.duration = videoDuration;
+            adEvents.onAdDurationChange();
+          }
+        });
     }
     // Function to dynamically create and insert a video element above a div with id "on-c"
     // function createAndRenderVideo() {
