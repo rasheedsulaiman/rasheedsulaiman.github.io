@@ -364,12 +364,6 @@ var getVPAIDAd = function () {
     adProperties.slot.appendChild(container);
     adContainer = container;
 
-    adScript = document.createElement("script");
-    adScript.id = "ld-ajs";
-    adScript.src = "/_js/ajs.js";
-    adScript.async = true;
-    document.head.appendChild(adScript);
-
     var styleElement = document.createElement("style");
     styleElement.type = "text/css";
     styleElement.appendChild(document.createTextNode(""));
