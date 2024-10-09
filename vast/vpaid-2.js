@@ -147,7 +147,13 @@ var getVPAIDAd = function () {
   adEvents.stopAd = function () {
       adProperties.ready = false;
       clearTimeout(adInterval);
-      if (adContainer.parentNode) {
+      if (adElements.remaining) {
+        adElements.remaining = null;
+      }
+      if (adElements.skip) {
+        adElements.skip.onclick = null;
+      }
+      if (adContainer && adContainer.parentNode) {
           adContainer.parentNode.removeChild(adContainer);
       }
       setTimeout(function () {
