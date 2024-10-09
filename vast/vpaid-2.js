@@ -162,6 +162,14 @@ var getVPAIDAd = function () {
       if (adElements.skip) {
         adElements.skip.onclick = null;
       }
+      // Remove video slot if present
+      if (adProperties.videoSlot && adProperties.videoSlot.parentNode) {
+          adProperties.videoSlot.pause();  // Pause video before removing
+          adProperties.videoSlot.src = ""; // Reset source to stop download
+          adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
+          adProperties.videoSlot = null;   // Clear reference
+      }
+
       if (adContainer && adContainer.parentNode) {
           adContainer.parentNode.removeChild(adContainer);
       }
