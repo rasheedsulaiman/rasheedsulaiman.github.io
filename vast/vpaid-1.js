@@ -33,7 +33,6 @@ var LinearAd = function() {
   // A list of attributes getable and setable.
   this._attributes = {
       companions : "",
-      desiredBitrate : 256,
       duration : 30,
       expanded : false,
       width : 0,
@@ -206,9 +205,9 @@ LinearAd.prototype.timeUpdateHandler = function() {
 };
 
 
-LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
+LinearAd.prototype.initAd = function(width, height, viewMode, environmentVars) {
 
-  console.log('initAd', width, height, viewMode, desiredBitrate, creativeData, environmentVars);
+  console.log('initAd', width, height, viewMode, environmentVars);
 
   // slot and videoSlot are passed as part of the environmentVars
   this._slot = environmentVars.slot;
@@ -221,13 +220,12 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   this._attributes.width = width;
   this._attributes.height = height;
   this._attributes.viewMode = viewMode;
-  this._attributes.desiredBitrate = desiredBitrate;
 
-  this.log('initAd ' + width + 'x' + height + ' ' + viewMode + ' ' + desiredBitrate);
+  this.log('initAd ' + width + 'x' + height + ' ' + viewMode);
 
-  //console.log('VP > ', creativeData);
-  //console.log('VP > environmentVars', environmentVars);
-  //console.log('VP > VIDEO SLOT', this._videoSlot);
+
+  console.log('VP > environmentVars', environmentVars);
+  console.log('VP > VIDEO SLOT', this._videoSlot);
 
   var that = this;
   if(this._videoSlot == null) {
