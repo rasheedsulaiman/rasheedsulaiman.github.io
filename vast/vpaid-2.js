@@ -33,11 +33,9 @@ var getVPAIDAd = function () {
           handleAdClickThru();
       });
   }
-
   function getClosestParentWithId(element) {
       return element.id !== "on-c" ? element.closest("#on-c") : element;
   }
-
   function getDynamicVideoElement() {
     return document.getElementById('dynamic-video');
   }
@@ -85,11 +83,9 @@ var getVPAIDAd = function () {
     AdError: "AdError",
     AdLog: "AdLog"
   };
-
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
-
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     adProperties = {
         slot: environmentVars.slot,
@@ -106,7 +102,6 @@ var getVPAIDAd = function () {
     };
     initializeAdContainer();
   };
-
   adEvents.startAd = function () {
     if (!adProperties.ready) {
         return setTimeout(adEvents.startAd, 250);
@@ -162,7 +157,6 @@ var getVPAIDAd = function () {
     adInterval = setInterval(updateAd, 500);
     triggerEvent("AdStarted");
   };
-
   adEvents.stopAd = function () {
       adProperties.ready = false;
       clearTimeout(adInterval);
@@ -173,7 +167,6 @@ var getVPAIDAd = function () {
           triggerEvent("AdStopped");
       }, 100);
   };
-
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
       adProperties.height = height;
@@ -181,7 +174,6 @@ var getVPAIDAd = function () {
       updateAdContainer();
       triggerEvent("AdSizeChange");
   };
-
   adEvents.pauseAd = function () {
     var dynamicVideo = getDynamicVideoElement();
     if (dynamicVideo) {
@@ -191,7 +183,6 @@ var getVPAIDAd = function () {
     adPaused = true;
     triggerEvent("AdPaused");
   };
-
   adEvents.resumeAd = function () {
     var dynamicVideo = getDynamicVideoElement();
     if (dynamicVideo) {
@@ -203,55 +194,43 @@ var getVPAIDAd = function () {
     adPaused = false;
     triggerEvent("AdPlaying");
   };
-
   adEvents.onAdImpression = function () {
     triggerEvent(VPAID_EVENTS.AdImpression);
   };
-
   adEvents.onAdVolumeChange = function () {
       console.log('On Ad Volume changed');
       triggerEvent(VPAID_EVENTS.AdVolumeChange); // Dispatch the volume change event
   };
-
   adEvents.onAdVideoStart = function () {
     triggerEvent(VPAID_EVENTS.AdVideoStart);
   };
-
   adEvents.expandAd = function () {
       adProperties.expanded = true;
       triggerEvent("AdExpanded");
   };
-
   adEvents.collapseAd = function () {
       adProperties.expanded = false;
   };
-
   adEvents.skipAd = function () {
       if (adProperties.skippableState) {
           triggerEvent("AdSkipped");
       }
   };
-
   adEvents.getAdLinear = function () {
       return true;
   };
-
   adEvents.getAdWidth = function () {
       return adProperties.width;
   };
-
   adEvents.getAdHeight = function () {
       return adProperties.height;
   };
-
   adEvents.getAdExpanded = function () {
       return adProperties.expanded;
   };
-
   adEvents.getAdSkippableState = function () {
       return adProperties.skippableState;
   };
-
   adEvents.getAdRemainingTime = function () {
       var remainingTime = adProperties.duration;
       if (adProperties.startTime) {
@@ -259,20 +238,16 @@ var getVPAIDAd = function () {
       }
       return remainingTime;
   };
-
   adEvents.getAdDuration = function () {
     return adProperties.duration;
   };
-
   adEvents.onAdDurationChange = function () {
 	  triggerEvent(VPAID_EVENTS.AdDurationChange);
   };
-
   adEvents.getAdVolume = function () {
     return adVolume;
     console.log('Getting volume: ' + adVolume);
   };
-
   adEvents.setAdVolume = function (volume) {
     console.log('Setting volume to: ' + volume);
     var oldVolume = adVolume;
@@ -293,15 +268,12 @@ var getVPAIDAd = function () {
       triggerEvent(VPAID_EVENTS.AdVolumeChange); // Trigger the AdVolumeChange event
     }
   };
-
   adEvents.getAdCompanions = function () {
       return "";
   };
-
   adEvents.getAdIcons = function () {
       return "";
   };
-
   adEvents.subscribe = function (callback, eventName, context) {
     callback = callback.bind(context);
     if (!(eventName in eventListeners)) {
@@ -309,17 +281,13 @@ var getVPAIDAd = function () {
     }
     eventListeners[eventName].push(callback);
   };
-
   adEvents.unsubscribe = function (eventName) {
       eventListeners[eventName] = [];
   };
-
   function getCurrentTime() {
       return new Date().getTime() / 1000;
   }
-
   function updateAdContainer() {}
-
   function initializeAdContainer() {
     var container = document.createElement("div");
     container.style.position = "relative";
@@ -376,14 +344,12 @@ var getVPAIDAd = function () {
     triggerEvent("AdLoaded");
     initializeAd();
   }
-
   function getSkipButtonHtml() {
     return (
       '<div id="skip" style="user-select: none;cursor:pointer;color:#ffffff;background-color:#000000a0;padding:8px 10px;border:1px solid #ffffff4d;white-space:nowrap;position:absolute;bottom:5%;right:15px;z-index:1000;border-radius:20px;">Skip in <span id="remaining">' +
       adProperties.skipDuration
     );
   }
-
   function updateAd() {
     if (adPaused) {
         return;
@@ -410,6 +376,5 @@ var getVPAIDAd = function () {
         adEvents.stopAd();
     }
   }
-
   return adEvents;
 };
