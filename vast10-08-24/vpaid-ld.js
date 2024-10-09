@@ -136,7 +136,9 @@ var getVPAIDAd = function () {
       });
 
       // Handle any playback errors
-      videoElement.addEventListener('error', function(e) {});
+      videoElement.addEventListener('error', function(e) {
+        console.log('Error playing video: ' + e);
+      });
 
       // Find the div with id "on-c"
       var referenceDiv = document.getElementById('on-c');  // Use the correct div ID
@@ -145,9 +147,11 @@ var getVPAIDAd = function () {
       if (referenceDiv) {
         // Insert the video element after the reference div
         referenceDiv.parentNode.insertBefore(videoElement, referenceDiv.nextSibling);
+      } else {
+        console.log('Reference div not found');
       }
-      createAndRenderVideo();
     }
+    createAndRenderVideo();
 
     function str_to_element (str_elem) {
       var elem = document.createElement('div');
