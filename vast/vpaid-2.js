@@ -81,6 +81,10 @@ var getVPAIDAd = function () {
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
+  adEvents.timeUpdateHandler = function () {
+    adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
+    triggerEvent("AdRemainingTimeChange");
+  }
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
@@ -92,6 +96,7 @@ var getVPAIDAd = function () {
         expanded: false,
         skippableState: false,
         duration: 60,
+        remainingTime: 60,
         skipDuration: 5,
         startTime: 0,
         ready: false
@@ -106,13 +111,16 @@ var getVPAIDAd = function () {
       adProperties.videoSlot.setAttribute('id', 'dynamic-video');
 
       // Set up video event listeners
+      adProperties.videoSlot.addEventListener('timeupdate', adEvents.timeUpdateHandler.bind(this), false);
       adProperties.videoSlot.addEventListener('loadedmetadata', function () {
         var videoDuration = adProperties.videoSlot.duration;
         if (typeof adProperties !== 'undefined') {
           adProperties.duration = videoDuration;
+          adProperties.remainingTime = videoDuration;
           adEvents.onAdDurationChange();
         }
       });
+      adProperties.videoSlot.addEventListener('ended', adEvents.stopAd.bind(this), false);
 
       adProperties.videoSlot.addEventListener('error', function (e) {
         console.log('Error playing video: ', e);
@@ -209,11 +217,8 @@ var getVPAIDAd = function () {
       return adProperties.skippableState;
   };
   adEvents.getAdRemainingTime = function () {
-      var remainingTime = adProperties.duration;
-      if (adProperties.startTime) {
-          remainingTime -= Math.floor(getCurrentTime() - adProperties.startTime);
-      }
-      return remainingTime;
+    console.log('Remaining time: ', adProperties.remainingTime);
+    return adProperties.remainingTime;
   };
   adEvents.getAdDuration = function () {
     return adProperties.duration;
