@@ -1,19 +1,36 @@
-var handleAdClickThru; // Declare handleAdClickThru in the outer scope
-var intervalId;        // Declare intervalId in the outer scope
-
 var getVPAIDAd = function () {
-  var adPaused = false;
-  var adClicked = false;
-  
-  // Define handleAdClickThru function in the outer scope
-  handleAdClickThru = function () {
-    if (!adClicked) {
-      clearInterval(intervalId);
-      adClicked = true;
-      triggerEvent("AdClickThru");
-    }
-  };
+  function setupClickTracking() {
+    var intervalId = setInterval(function () {
+        var activeElement = document.activeElement;
+        if (activeElement && activeElement.tagName === "IFRAME") {
+            clearInterval(intervalId);
+            if (getClosestOnCElement(activeElement.parentNode).id === "on-c") {
+                handleAdClickThru();
+            }
+        }
+    }, 100);
 
+    var adClicked = false;
+
+    try {
+        document.querySelector("iframe").addEventListener("load", function () {
+            this.blur();
+        });
+    } catch (error) {}
+
+    function handleAdClickThru() {
+        if (!adClicked) {
+            clearInterval(intervalId);
+            adClicked = true;
+            triggerEvent("AdClickThru");
+        }
+    }
+
+    document.querySelector("#on-c").addEventListener("click", function () {
+        handleAdClickThru();
+    });
+}
+  var adPaused = false;
   function initializeAd() {
       var intervalId = setInterval(function () {
           var activeElement = document.activeElement;
@@ -30,7 +47,7 @@ var getVPAIDAd = function () {
               this.blur();
           });
       } catch (e) {}
-      
+
       document.querySelector("#on-c").addEventListener("click", function () {
           handleAdClickThru();
       });
@@ -128,6 +145,7 @@ var getVPAIDAd = function () {
     initializeAdContainer(); // Initialize the ad container
     adProperties.ready = true; // Set the ad as ready
     triggerEvent("AdLoaded");  // Dispatch the AdLoaded event
+    setupClickTracking();
   };
   adEvents.startAd = function () {
     if (!adProperties.ready) {
@@ -148,31 +166,16 @@ var getVPAIDAd = function () {
     adInterval = setInterval(updateAd, 500); // Update the ad
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
-  
   adEvents.stopAd = function () {
-    adProperties.ready = false; // Set the ad as not ready
-    clearInterval(adInterval); // Clear the ad interval
-    clearInterval(intervalId); // Clear the interval ID
-
-    if (adEvents.videoSlot) {
-      adProperties.videoSlot.pause(); // Pause the video slot
-      adProperties.videoSlot.remove(); // Remove the video slot
-    }
-
-    if (adContainer.parentNode) {
-      adContainer.parentNode.removeChild(adContainer); // Remove the ad container
-    }
-
-    // Step 6: Trigger the AdStopped event
-    setTimeout(function () {
-        console.log("Triggering AdStopped event");
-        triggerEvent("AdStopped");
-    }, 100);
-
-    console.log("stopAd function completed");
+      adProperties.ready = false;
+      clearTimeout(adInterval);
+      if (adContainer.parentNode) {
+          adContainer.parentNode.removeChild(adContainer);
+      }
+      setTimeout(function () {
+          triggerEvent("AdStopped");
+      }, 100);
   };
-
-
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
       adProperties.height = height;
