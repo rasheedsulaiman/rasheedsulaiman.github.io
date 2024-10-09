@@ -82,9 +82,13 @@ var getVPAIDAd = function () {
       return "2.0";
   };
   adEvents.timeUpdateHandler = function () {
-    adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
-    triggerEvent("AdRemainingTimeChange");
-  }
+    // Only update remaining time if the video is not paused
+    if (!adPaused && adProperties.videoSlot) {
+      adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
+      triggerEvent("AdRemainingTimeChange");
+      console.log('Remaining time: ', adProperties.remainingTime);
+    }
+  };
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
@@ -170,14 +174,21 @@ var getVPAIDAd = function () {
       triggerEvent("AdSizeChange");
   };
   adEvents.pauseAd = function () {
-    adProperties.videoSlot.pause();
+    if (adProperties.videoSlot) {
+      adProperties.videoSlot.pause();
+    }
     adPaused = true;
     triggerEvent("AdPaused");
+    console.log('Ad paused, updating state');
   };
   adEvents.resumeAd = function () {
-    adProperties.videoSlot.play();
+    if (adProperties.videoSlot) {
+      adProperties.videoSlot.play();
+    }
     adPaused = false;
+    adProperties.startTime = getCurrentTime() - (adProperties.duration - adProperties.remainingTime); // Update the start time
     triggerEvent("AdPlaying");
+    console.log('Ad resumed, updating state');
   };
   adEvents.onAdImpression = function () {
     triggerEvent(VPAID_EVENTS.AdImpression);
@@ -321,8 +332,12 @@ var getVPAIDAd = function () {
     );
   }
   function updateAd() {
+    if (adPaused) {
+        return;  // Do not update the ad if it is paused
+    }
     var elapsedTime = getCurrentTime() - adProperties.startTime;
     var remainingTime = Math.floor(adProperties.skipDuration - elapsedTime);
+
     if (remainingTime > 0) {
         adElements.remaining.innerHTML = remainingTime;
     } else if (adElements.remaining) {
