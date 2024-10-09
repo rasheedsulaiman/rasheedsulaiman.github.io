@@ -153,14 +153,33 @@ var getVPAIDAd = function () {
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
   adEvents.stopAd = function () {
-      adProperties.ready = false;
-      clearTimeout(adInterval);
-      if (adContainer.parentNode) {
-          adContainer.parentNode.removeChild(adContainer);
-      }
-      setTimeout(function () {
-          triggerEvent("AdStopped");
-      }, 100);
+    adProperties.ready = false;
+    clearTimeout(adInterval);
+
+    // Explicitly stop and remove the video element if it exists
+    if (adProperties.videoSlot) {
+        try {
+            adProperties.videoSlot.pause(); // Stop the video
+            adProperties.videoSlot.src = ""; // Clear the source
+            adProperties.videoSlot.load(); // Ensure the video stops loading
+        } catch (e) {
+            console.log("Error stopping the video: ", e);
+        }
+        // Remove the video element from its parent container
+        if (adProperties.videoSlot.parentNode) {
+            adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
+        }
+    }
+
+    // Remove the ad container if it exists
+    if (adContainer && adContainer.parentNode) {
+        adContainer.parentNode.removeChild(adContainer);
+    }
+
+    // Dispatch the AdStopped event after a short delay to allow DOM updates
+    setTimeout(function () {
+        triggerEvent("AdStopped");
+    }, 100);
   };
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
