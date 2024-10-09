@@ -81,7 +81,7 @@ var getVPAIDAd = function () {
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
-  
+
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
@@ -116,7 +116,6 @@ var getVPAIDAd = function () {
           adEvents.onAdDurationChange();
         }
       });
-      adProperties.videoSlot.addEventListener('ended', adEvents.stopAd.bind(this), false);
 
       adProperties.videoSlot.addEventListener('error', function (e) {
         console.log('Error playing video: ', e);
@@ -151,10 +150,20 @@ var getVPAIDAd = function () {
   adEvents.stopAd = function () {
       adProperties.ready = false;
       clearTimeout(adInterval);
-      if (adContainer.parentNode) {
-          adContainer.parentNode.removeChild(adContainer);
-      }
+      
+
+      if (adContainer && adContainer.parentNode) {
+        console.log('Ad container found. Removing...');
+        adContainer.parentNode.removeChild(adContainer);
+        adContainer = null;
+        console.log('Ad container removed');
+      } else {
+        console.log('Ad container not found');
+      } 
+      console.log('After removal, adContainer: ', adContainer);
+
       setTimeout(function () {
+        console.log('Triggerring AdStopped event');
           triggerEvent("AdStopped");
       }, 100);
   };
