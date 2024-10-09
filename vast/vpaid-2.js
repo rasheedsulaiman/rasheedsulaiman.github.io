@@ -145,38 +145,61 @@ var getVPAIDAd = function () {
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
   adEvents.stopAd = function () {
-      adProperties.ready = false;
-      clearInterval(intervalId);
-      clearTimeout(adInterval);
+    console.log("stopAd function triggered");
 
-      // Remove click event listener on #on-c if present
-      var adClickElement = document.querySelector("#on-c");
-      if (adClickElement) {
-          adClickElement.removeEventListener("click", handleAdClickThru);
-      }
+    // Step 1: Clear all intervals
+    if (typeof intervalId !== 'undefined') {
+        clearInterval(intervalId);
+        console.log("Cleared intervalId");
+    }
 
+    if (typeof adInterval !== 'undefined') {
+        clearTimeout(adInterval);
+        console.log("Cleared adInterval");
+    }
 
-      if (adElements.remaining) {
-        adElements.remaining = null;
-      }
-      if (adElements.skip) {
-        adElements.skip.onclick = null;
-      }
-      // Remove video slot if present
-      if (adProperties.videoSlot && adProperties.videoSlot.parentNode) {
-          adProperties.videoSlot.pause();  // Pause video before removing
-          adProperties.videoSlot.src = ""; // Reset source to stop download
-          adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
-          adProperties.videoSlot = null;   // Clear reference
-      }
+    // Step 2: Remove click event listener on #on-c if present
+    var adClickElement = document.querySelector("#on-c");
+    if (adClickElement) {
+        adClickElement.removeEventListener("click", handleAdClickThru);
+        console.log("Removed click listener from #on-c");
+    } else {
+        console.log("#on-c not found in DOM");
+    }
 
-      if (adContainer && adContainer.parentNode) {
-          adContainer.parentNode.removeChild(adContainer);
-      }
-      setTimeout(function () {
-          triggerEvent("AdStopped");
-      }, 100);
-  };
+    // Step 3: Remove video slot if present
+    if (adProperties && adProperties.videoSlot) {
+        console.log("Found videoSlot:", adProperties.videoSlot);
+        if (adProperties.videoSlot.parentNode) {
+            adProperties.videoSlot.pause();  // Pause video before removing
+            adProperties.videoSlot.src = ""; // Clear video source
+            adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
+            console.log("Removed videoSlot from DOM");
+        } else {
+            console.log("Video slot parentNode not found");
+        }
+        adProperties.videoSlot = null;   // Clear reference
+    } else {
+        console.log("No videoSlot found in adProperties");
+    }
+
+    // Step 4: Remove the main ad container
+    if (adContainer && adContainer.parentNode) {
+        adContainer.parentNode.removeChild(adContainer);
+        console.log("Ad container removed from DOM");
+    } else {
+        console.log("Ad container not found in DOM");
+    }
+
+    // Step 5: Log AdStopped event
+    setTimeout(function () {
+        console.log("Triggering AdStopped event");
+        triggerEvent("AdStopped");
+    }, 100);
+
+    console.log("stopAd function completed");
+};
+
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
       adProperties.height = height;
