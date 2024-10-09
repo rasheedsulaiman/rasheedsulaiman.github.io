@@ -1,39 +1,18 @@
 <VAST version="3.0">
-  <Ad id="12345">
+  <Ad id="Test">
     <InLine>
-      <AdSystem>MyAdServer</AdSystem>
-      <AdTitle>Sample Video Ad</AdTitle>
-
+      <AdSystem>Test</AdSystem>
+      <AdTitle>Test</AdTitle>
       <Creatives>
-        <Creative>
-          <Linear>
-            <Duration>00:01:00</Duration>
+        <Creative sequence="1">
+          <Linear skipoffset="00:00:05">
+            <Duration>00:00:30</Duration>
             <MediaFiles>
-              <!-- VPAID JS Ad -->
-              <MediaFile 
-                delivery="progressive" 
-                type="application/javascript" 
-                apiFramework="VPAID" 
-                width="640" 
-                height="360">
-                <![CDATA[https://rasheedsulaiman.github.io/vast/vpaid.js]]>
-              </MediaFile>
-
-              <!-- MP4 Video Ad -->
-              <MediaFile 
-                delivery="progressive" 
-                type="video/mp4" 
-                width="640" 
-                height="360" 
-                bitrate="500">
-                <![CDATA[https://rasheedsulaiman.github.io/vast/test-ad.mp4]]>
-              </MediaFile>
+              <MediaFile delivery="progressive" type="application/javascript" apiFramework="VPAID" width="1280" height="720">https://rasheedsulaiman.github.io/vast10-08-24/vpaid.js</MediaFile>
             </MediaFiles>
           </Linear>
         </Creative>
       </Creatives>
-
-      <!-- <Error><![CDATA[https://example.com/error]]></Error> -->
     </InLine>
   </Ad>
 </VAST>
