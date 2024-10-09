@@ -81,14 +81,7 @@ var getVPAIDAd = function () {
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
-  adEvents.timeUpdateHandler = function () {
-    // Only update remaining time if the video is not paused
-    if (!adPaused && adProperties.videoSlot) {
-      adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
-      triggerEvent("AdRemainingTimeChange");
-      console.log('Remaining time: ', adProperties.remainingTime);
-    }
-  };
+  
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
@@ -114,8 +107,7 @@ var getVPAIDAd = function () {
       adProperties.videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large');
       adProperties.videoSlot.setAttribute('id', 'dynamic-video');
 
-      // Set up video event listeners
-      adProperties.videoSlot.addEventListener('timeupdate', adEvents.timeUpdateHandler.bind(this), false);
+      // Set up video event listener
       adProperties.videoSlot.addEventListener('loadedmetadata', function () {
         var videoDuration = adProperties.videoSlot.duration;
         if (typeof adProperties !== 'undefined') {
@@ -335,6 +327,11 @@ var getVPAIDAd = function () {
     if (adPaused) {
         return;  // Do not update the ad if it is paused
     }
+    // Calculate remaining time based on video slot's currentTime
+    if (adProperties.videoSlot) {
+      adProperties.remainingTime = adProperties.duration - adProperties.videoSlot.currentTime;
+    }
+    // Update skip duration timer and display remaining time
     var elapsedTime = getCurrentTime() - adProperties.startTime;
     var remainingTime = Math.floor(adProperties.skipDuration - elapsedTime);
 
@@ -354,9 +351,10 @@ var getVPAIDAd = function () {
             triggerEvent("AdUserClose");
             adEvents.stopAd();
         };
-    } else if (elapsedTime > adProperties.duration) {
+    } else if (adProperties.remainingTime <= 0) {
         adEvents.stopAd();
     }
+    triggerEvent("AdRemainingTimeChange"); // Trigger the remaining time change event
   }
   return adEvents;
 };
