@@ -237,6 +237,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   var that = this;
   if(this._videoSlot == null) {
       this._videoSlot = document.createElement('video');
+      this._videoSlot.id = 'dynamic-video';
       this._slot.appendChild(this._videoSlot);
   }
 
