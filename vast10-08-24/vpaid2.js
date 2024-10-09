@@ -240,7 +240,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
       this._slot.appendChild(this._videoSlot);
   }
 
-  this._videoSlot.setAttribute('src', 'https://rasheedsulaiman.github.io/vast/test-ad.mp4');
+  this._videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large');
 
   this._videoSlot.addEventListener('timeupdate', this.timeUpdateHandler.bind(this), false);
   this._videoSlot.addEventListener('loadedmetadata', function(event) {
