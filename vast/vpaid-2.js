@@ -1,5 +1,19 @@
+var handleAdClickThru; // Declare handleAdClickThru in the outer scope
+var intervalId;        // Declare intervalId in the outer scope
+
 var getVPAIDAd = function () {
   var adPaused = false;
+  var adClicked = false;
+  
+  // Define handleAdClickThru function in the outer scope
+  handleAdClickThru = function () {
+    if (!adClicked) {
+      clearInterval(intervalId);
+      adClicked = true;
+      triggerEvent("AdClickThru");
+    }
+  };
+
   function initializeAd() {
       var intervalId = setInterval(function () {
           var activeElement = document.activeElement;
@@ -11,22 +25,12 @@ var getVPAIDAd = function () {
           }
       }, 100);
 
-      var adClicked = false;
-
       try {
           document.querySelector("iframe").addEventListener("load", function () {
               this.blur();
           });
       } catch (e) {}
-
-      function handleAdClickThru() {
-          if (!adClicked) {
-              clearInterval(intervalId);
-              adClicked = true;
-              triggerEvent("AdClickThru");
-          }
-      }
-
+      
       document.querySelector("#on-c").addEventListener("click", function () {
           handleAdClickThru();
       });
@@ -144,61 +148,46 @@ var getVPAIDAd = function () {
     adInterval = setInterval(updateAd, 500); // Update the ad
     triggerEvent("AdStarted");  // Dispatch the AdStarted event
   };
+  
   adEvents.stopAd = function () {
     console.log("stopAd function triggered");
 
-    // Step 1: Clear all intervals
-    if (typeof intervalId !== 'undefined') {
-        clearInterval(intervalId);
-        console.log("Cleared intervalId");
-    }
+    // Safely clear the intervals and timeouts
+    clearInterval(intervalId);
+    clearTimeout(adInterval);
+    console.log("Cleared intervals");
 
-    if (typeof adInterval !== 'undefined') {
-        clearTimeout(adInterval);
-        console.log("Cleared adInterval");
-    }
-
-    // Step 2: Remove click event listener on #on-c if present
+    // Remove click listeners from elements
     var adClickElement = document.querySelector("#on-c");
     if (adClickElement) {
-        adClickElement.removeEventListener("click", handleAdClickThru);
-        console.log("Removed click listener from #on-c");
-    } else {
-        console.log("#on-c not found in DOM");
+      adClickElement.removeEventListener("click", handleAdClickThru);
+      console.log("Removed click listener from #on-c");
     }
 
-    // Step 3: Remove video slot if present
+    // Remove video slot
     if (adProperties && adProperties.videoSlot) {
-        console.log("Found videoSlot:", adProperties.videoSlot);
-        if (adProperties.videoSlot.parentNode) {
-            adProperties.videoSlot.pause();  // Pause video before removing
-            adProperties.videoSlot.src = ""; // Clear video source
-            adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
-            console.log("Removed videoSlot from DOM");
-        } else {
-            console.log("Video slot parentNode not found");
-        }
-        adProperties.videoSlot = null;   // Clear reference
-    } else {
-        console.log("No videoSlot found in adProperties");
+      adProperties.videoSlot.pause();
+      adProperties.videoSlot.src = "";
+      if (adProperties.videoSlot.parentNode) {
+        adProperties.videoSlot.parentNode.removeChild(adProperties.videoSlot);
+      }
+      console.log("Removed videoSlot from DOM");
     }
 
-    // Step 4: Remove the main ad container
+    // Remove the ad container
     if (adContainer && adContainer.parentNode) {
-        adContainer.parentNode.removeChild(adContainer);
-        console.log("Ad container removed from DOM");
-    } else {
-        console.log("Ad container not found in DOM");
+      adContainer.parentNode.removeChild(adContainer);
+      console.log("Ad container removed from DOM");
     }
 
-    // Step 5: Log AdStopped event
+    // Trigger the final AdStopped event
     setTimeout(function () {
-        console.log("Triggering AdStopped event");
-        triggerEvent("AdStopped");
+      console.log("Triggering AdStopped event");
+      triggerEvent("AdStopped");
     }, 100);
 
     console.log("stopAd function completed");
-};
+  };
 
   adEvents.resizeAd = function (width, height, viewMode) {
       adProperties.width = width;
