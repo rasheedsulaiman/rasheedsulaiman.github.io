@@ -223,6 +223,7 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   iframe.width = width;
   iframe.height = height;
   iframe.setAttribute('frameBorder', '0');
+  iframe.setAttribute('id', 'vpaid-frame');
   iframe.setAttribute('allowfullscreen', 'true');
 
   // Insert the iframe into the slot
