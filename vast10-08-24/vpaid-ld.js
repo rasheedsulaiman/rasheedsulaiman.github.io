@@ -330,7 +330,7 @@ var getVPAIDAd = function () {
 
     if (window.top !== window) {
         window.ldAdInit = window.ldAdInit || [];
-        window.ldAdInit.push({ slot: {slot_id}, size: [0, 0], id: "ld-3701-3915" });
+        window.ldAdInit.push({ size: [0, 0], id: "ld-3701-3915" });
     }
 
     container.innerHTML = '<div id="on-c" style="box-sizing:border-box;width:100%;padding:0px;height:100%;position:absolute;opacity:0;z-index:999"><div id="ld-3701-3915" data-ld-vpaid="1" style="width:100%"></div></div>' + getSkipButtonHtml();
