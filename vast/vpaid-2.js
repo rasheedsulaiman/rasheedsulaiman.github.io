@@ -85,7 +85,8 @@ var getVPAIDAd = function () {
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
-  adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
+  adEvents.initAd = function (width, height, viewMode, environmentVars) {
+    console.log("initAd called with width:", width, "height:", height, "viewMode:", viewMode);
     adProperties = {
         slot: environmentVars.slot,
         videoSlot: environmentVars.videoSlot,
