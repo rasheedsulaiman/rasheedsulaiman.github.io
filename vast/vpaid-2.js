@@ -1,37 +1,6 @@
 var getVPAIDAd = function () {
-  function setupClickTracking() {
-    var intervalId = setInterval(function () {
-        var activeElement = document.activeElement;
-        if (activeElement && activeElement.tagName === "IFRAME") {
-            clearInterval(intervalId);
-            if (getClosestOnCElement(activeElement.parentNode).id === "on-c") {
-                handleAdClickThru();
-            }
-        }
-    }, 100);
-
-    var adClicked = false;
-
-    try {
-        document.querySelector("iframe").addEventListener("load", function () {
-            this.blur();
-        });
-    } catch (error) {}
-
-    function handleAdClickThru() {
-        if (!adClicked) {
-            clearInterval(intervalId);
-            adClicked = true;
-            triggerEvent("AdClickThru");
-        }
-    }
-
-    document.querySelector("#on-c").addEventListener("click", function () {
-        handleAdClickThru();
-    });
-}
   var adPaused = false;
-  function initializeAd() {
+  function setupClickTracking() {
       var intervalId = setInterval(function () {
           var activeElement = document.activeElement;
           if (activeElement && activeElement.tagName === "IFRAME") {
@@ -42,11 +11,21 @@ var getVPAIDAd = function () {
           }
       }, 100);
 
+      var adClicked = false;
+
       try {
           document.querySelector("iframe").addEventListener("load", function () {
               this.blur();
           });
       } catch (e) {}
+
+      function handleAdClickThru() {
+          if (!adClicked) {
+              clearInterval(intervalId);
+              adClicked = true;
+              triggerEvent("AdClickThru");
+          }
+      }
 
       document.querySelector("#on-c").addEventListener("click", function () {
           handleAdClickThru();
@@ -145,7 +124,6 @@ var getVPAIDAd = function () {
     initializeAdContainer(); // Initialize the ad container
     adProperties.ready = true; // Set the ad as ready
     triggerEvent("AdLoaded");  // Dispatch the AdLoaded event
-    setupClickTracking();
   };
   adEvents.startAd = function () {
     if (!adProperties.ready) {
@@ -276,6 +254,7 @@ var getVPAIDAd = function () {
       return new Date().getTime() / 1000;
   }
   function updateAdContainer() {}
+
   function initializeAdContainer() {
     var container = document.createElement("div");
     container.style.position = "relative";
@@ -329,17 +308,18 @@ var getVPAIDAd = function () {
 
     adProperties.ready = true;
     triggerEvent("AdLoaded");
-    initializeAd();
+    setupClickTracking();
   }
   function getSkipButtonHtml() {
     return (
       '<div id="skip" style="user-select: none;cursor:pointer;color:#ffffff;background-color:#000000a0;padding:8px 10px;border:1px solid #ffffff4d;white-space:nowrap;position:absolute;bottom:5%;right:15px;z-index:1000;border-radius:20px;">Skip in <span id="remaining">' +
-      adProperties.skipDuration
+      adProperties.skipDuration + '</span> ...</div>'
     );
   }
   function updateAd() {
     var elapsedTime = getCurrentTime() - adProperties.startTime;
     var remainingTime = Math.floor(adProperties.skipDuration - elapsedTime);
+
     if (remainingTime > 0) {
         adElements.remaining.innerHTML = remainingTime;
     } else if (adElements.remaining) {
