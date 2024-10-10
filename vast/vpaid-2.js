@@ -1,5 +1,9 @@
 var getVPAIDAd = function () {
   var adPaused = false;
+  var adProperties = {
+      slot: null,
+      videoSlot: null,
+  }
   function setupClickTracking() {
       var intervalId = setInterval(function () {
           var activeElement = document.activeElement;
@@ -51,7 +55,7 @@ var getVPAIDAd = function () {
       };
 
   adEvents.handshakeVersion = function (version) {
-      return "2.0";
+      return ('2.0');
   };
   adEvents.initAd = function (width, height, viewMode, desiredBitrate, creativeData, environmentVars) {
     console.log('environmentVars: ', environmentVars);
