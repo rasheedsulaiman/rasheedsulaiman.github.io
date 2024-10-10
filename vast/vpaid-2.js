@@ -50,34 +50,6 @@ var getVPAIDAd = function () {
           }
       };
 
-  var VPAID_EVENTS = {
-    AdStarted: "AdStarted",
-    AdStopped: "AdStopped",
-    AdSkipped: "AdSkipped",
-    AdLoaded: "AdLoaded",
-    AdLinearChange: "AdLinearChange",
-    AdSizeChange: "AdSizeChange",
-    AdExpandedChange: "AdExpandedChange",
-    AdSkippableStateChange: "AdSkippableStateChange",
-    AdDurationChange: "AdDurationChange",
-    AdRemainingTimeChange: "AdRemainingTimeChange",
-    AdVolumeChange: "AdVolumeChange",
-    AdImpression: "AdImpression",
-    AdClickThru: "AdClickThru",
-    AdInteraction: "AdInteraction",
-    AdVideoStart: "AdVideoStart",
-    AdVideoFirstQuartile: "AdVideoFirstQuartile",
-    AdVideoMidpoint: "AdVideoMidpoint",
-    AdVideoThirdQuartile: "AdVideoThirdQuartile",
-    AdVideoComplete: "AdVideoComplete",
-    AdUserAcceptInvitation: "AdUserAcceptInvitation",
-    AdUserMinimize: "AdUserMinimize",
-    AdUserClose: "AdUserClose",
-    AdPaused: "AdPaused",
-    AdPlaying: "AdPlaying",
-    AdError: "AdError",
-    AdLog: "AdLog"
-  };
   adEvents.handshakeVersion = function (version) {
       return "2.0";
   };
@@ -85,7 +57,7 @@ var getVPAIDAd = function () {
     console.log('environmentVars: ', environmentVars);
     adProperties = {
         slot: environmentVars.slot,
-        videoSlot: environmentVars.videoSlot || null,
+        videoSlot: environmentVars.videoSlot,
         width: width,
         height: height,
         viewMode: viewMode,
@@ -172,14 +144,14 @@ var getVPAIDAd = function () {
     triggerEvent("AdPlaying");
   };
   adEvents.onAdImpression = function () {
-    triggerEvent(VPAID_EVENTS.AdImpression);
+    triggerEvent('AdImpression');
   };
   adEvents.onAdVolumeChange = function () {
       console.log('On Ad Volume changed');
-      triggerEvent(VPAID_EVENTS.AdVolumeChange); // Dispatch the volume change event
+      triggerEvent('AdVolumeChange'); // Dispatch the volume change event
   };
   adEvents.onAdVideoStart = function () {
-    triggerEvent(VPAID_EVENTS.AdVideoStart);
+    triggerEvent('AdVideoStart');
   };
   adEvents.expandAd = function () {
       adProperties.expanded = true;
@@ -219,7 +191,7 @@ var getVPAIDAd = function () {
     return adProperties.duration;
   };
   adEvents.onAdDurationChange = function () {
-	  triggerEvent(VPAID_EVENTS.AdDurationChange);
+	  triggerEvent('AdDurationChange');
   };
   adEvents.getAdVolume = function () {
     return adVolume;
@@ -231,7 +203,7 @@ var getVPAIDAd = function () {
       adProperties.adVolume = value;
       adProperties.videoSlot.volume = value;
       console.log('Ad volume set to: ', value);
-      triggerEvent(VPAID_EVENTS.AdVolumeChange);
+      triggerEvent('AdVolumeChange');
     }
   };
   adEvents.getAdCompanions = function () {
