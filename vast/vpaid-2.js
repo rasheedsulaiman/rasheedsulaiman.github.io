@@ -122,7 +122,7 @@ var getVPAIDAd = function () {
     }
 
     initializeAdContainer(); // Initialize the ad container
-    adProperties.ready = true; // Set the ad as ready
+    // adProperties.ready = true;  Set the ad as ready
     triggerEvent("AdLoaded");  // Dispatch the AdLoaded event
   };
   adEvents.startAd = function () {
