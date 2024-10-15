@@ -133,8 +133,11 @@ LinearAd.prototype.onAdStopped = function() {
   }
 };
 LinearAd.prototype.onAdSkipped = function() {
-  if (this.VPAID_EVENTS.AdSkipped in this._eventCallbacks) {
+  console.log('VP > onAdSkipped');
+  if (this.VPAID_EVENTS.AdSkipped in this._eventCallbacks && typeof this._eventCallbacks[this.VPAID_EVENTS.AdSkipped] === 'function') {
       this._eventCallbacks[this.VPAID_EVENTS.AdSkipped]();
+  } else {
+    console.warn('AdKipped event callback is not a function');
   }
 };
 LinearAd.prototype.onAdDurationChange = function() {
@@ -396,5 +399,6 @@ LinearAd.prototype.log = function(message) {
 function getVPAIDAd() {
   //console.log('VP > getVPAIDAd');
   return new LinearAd;
+  
 }
 window.getVPAIDAd = getVPAIDAd
