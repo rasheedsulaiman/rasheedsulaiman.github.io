@@ -357,6 +357,8 @@ LinearAd.prototype.skipAd = function() {
       console.log('Attempting to skip ad');
       this._videoSlot.pause();
       this._videoSlot.currentTime = this._videoSlot.duration;
+      this._videoSlot.removeAttribute('src');
+      this._videoSlot.load();
   }
 };
 LinearAd.prototype.subscribe = function(callback, eventName, context) {
