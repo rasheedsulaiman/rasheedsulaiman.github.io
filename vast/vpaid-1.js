@@ -62,6 +62,7 @@ var LinearAd = function() {
   this._isStarted = false;
   this._isPaused = false;
 };
+
 LinearAd.prototype.doContentComplete = function() {
   console.log('VP > contentEndedListener executed');
 };
@@ -186,6 +187,7 @@ LinearAd.prototype.onAdError = function(message) {
       this._eventCallbacks[this.VPAID_EVENTS.AdError](message);
   }
 };
+
 LinearAd.prototype.handshakeVersion = function(version) {
   return ('2.0');
 };
@@ -214,10 +216,6 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   this._slot = environmentVars.slot;
   this._videoSlot = environmentVars.videoSlot;
 
-  // Fix for Safari mobile browser
-  //this._videoSlot.setAttribute('muted','');
-  //this._videoSlot.muted = true;
-
   this._attributes.width = width;
   this._attributes.height = height;
   this._attributes.viewMode = viewMode;
@@ -236,8 +234,41 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
   }
 
   this._videoSlot.setAttribute('id', 'dynamic-video');
-
   this._videoSlot.setAttribute('src', 'https://cdn1.decide.co/uploads/0fedb9c486ee0e4aac922c26b04cc0ba141532213cd8efd114344460d72a5620_video_large');
+
+  // Add skip button
+  this._skipButton = document.createElement('button');
+  this._skipButton.setAttribute('id', 'skip-button');
+  this._skipButton.style.position = 'absolute';
+  this._skipButton.style.bottom = '10px';
+  this._skipButton.style.right = '10px';
+  this._skipButton.style.padding = '10px';
+  this._skipButton.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+  this._skipButton.style.color = '#fff';
+  this._skipButton.style.border = 'none';
+  this._skipButton.style.cursor = 'default';
+  this._slot.appendChild(this._skipButton);
+
+  // Initialize skip countdown
+  let skipCountdown = 5;
+  this._skipButton.innerHTML = 'Skip in ' + skipCountdown;
+
+  const countdownInterval = setInterval(function() {
+    skipCountdown--;
+    if (skipCountdown > 0) {
+        that._skipButton.innerHTML = 'Skip in ' + skipCountdown;
+    } else {
+        clearInterval(countdownInterval);
+        that._skipButton.innerHTML = 'Skip Ad';
+        that._skipButton.style.cursor = 'pointer';
+        that._skipButton.addEventListener('click', function() {
+            that.skipAd();
+        });
+        that._attributes.skippableState = true;
+        that.onAdSkippableStateChange();
+    }
+  }, 1000);
+
 
   this._videoSlot.addEventListener('timeupdate', this.timeUpdateHandler.bind(this), false);
   this._videoSlot.addEventListener('loadedmetadata', function(event) {
