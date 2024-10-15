@@ -349,15 +349,7 @@ LinearAd.prototype.getAdSkippableState = function() {
   return this._attributes.skippableState;
 };
 LinearAd.prototype.skipAd = function() {
-  console.log('VP > skipAd clicked');
   this.onAdSkipped();
-  // Attempt to explicitly stop the video
-  if (this._videoSlot) {
-      console.log('VP > Attempting to stop video');
-      this._videoSlot.pause();
-      this._videoSlot.currentTime = this._videoSlot.duration
-  }
-  this.onAdStopped();
 };
 LinearAd.prototype.subscribe = function(callback, eventName, context) {
   this.log('Subscribe ' + eventName);
