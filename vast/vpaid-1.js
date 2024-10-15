@@ -262,9 +262,11 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
         that._skipButton.innerHTML = 'Skip Ad';
         that._skipButton.style.cursor = 'pointer';
         that._skipButton.addEventListener('click', function() {
+          console.log('SKIP BUTTON CLICKED');
             that.skipAd();
         });
         that._skipButton.addEventListener('touchend', function() {
+          console.log('SKIP BUTTON TOUCHED');
           that.skipAd();
         });
         that._attributes.skippableState = true;
@@ -349,9 +351,10 @@ LinearAd.prototype.getAdSkippableState = function() {
   return this._attributes.skippableState;
 };
 LinearAd.prototype.skipAd = function() {
-  console.log('VP > skipAd');
+  console.log('SKIP BUTTON CLICKED');
   this.onAdSkipped();
   if (this._videoSlot) {
+      console.log('Attempting to skip ad');
       this._videoSlot.pause();
       this._videoSlot.currentTime = this._videoSlot.duration;
   }
