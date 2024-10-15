@@ -349,7 +349,12 @@ LinearAd.prototype.getAdSkippableState = function() {
   return this._attributes.skippableState;
 };
 LinearAd.prototype.skipAd = function() {
+  console.log('VP > skipAd');
   this.onAdSkipped();
+  if (this._videoSlot) {
+      this._videoSlot.pause();
+      this._videoSlot.currentTime = this._videoSlot.duration;
+  }
 };
 LinearAd.prototype.subscribe = function(callback, eventName, context) {
   this.log('Subscribe ' + eventName);
