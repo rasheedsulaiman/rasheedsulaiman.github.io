@@ -264,6 +264,9 @@ LinearAd.prototype.initAd = function(width, height, viewMode, desiredBitrate, cr
         that._skipButton.addEventListener('click', function() {
             that.skipAd();
         });
+        that._skipButton.addEventListener('touchend', function() {
+          that.skipAd();
+        });
         that._attributes.skippableState = true;
         that.onAdSkippableStateChange();
     }
