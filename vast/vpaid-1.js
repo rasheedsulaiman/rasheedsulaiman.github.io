@@ -360,6 +360,12 @@ LinearAd.prototype.skipAd = function() {
       this._videoSlot.removeAttribute('src');
       this._videoSlot.load();
   }
+
+  var that = this;
+    setTimeout(function() {
+        that.onAdStopped();
+        console.log('AdStopped event emitted');
+  }, 100);
 };
 LinearAd.prototype.subscribe = function(callback, eventName, context) {
   this.log('Subscribe ' + eventName);
