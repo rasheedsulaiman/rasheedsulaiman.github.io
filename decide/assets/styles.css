@@ -158,17 +158,22 @@
 						padding: 80px 40px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 2fr;
-            grid-template-rows: auto auto auto;
+            /* grid-template-columns: 1fr 2fr;
+            grid-template-rows: auto auto auto; */
             gap: 40px;
-            grid-template-areas: 
+            /* grid-template-areas: 
                 "text visuals"
                 "headers headers"
-                "rows rows";
+                "rows rows"; */
         }
+				.comparison-hero {
+						display: grid;
+						gap: 40px;
+						grid-template-columns: 1fr 1fr 1fr;
+				}
 
         .comparison-text {
-            grid-area: text;
+            /* grid-area: text; */
             padding-right: 40px;
         }
 
@@ -188,7 +193,7 @@
         }
 
         .comparison-visuals {
-            grid-area: visuals;
+            /* grid-area: visuals; */
             display: flex;
             gap: 20px;
             align-items: flex-start;
@@ -200,8 +205,8 @@
         }
 
         .large-image {
-            width: 320px;
-            height: 240px;
+            width: 100%;
+            min-height: 320px;
         }
 
         .small-image {
@@ -210,7 +215,7 @@
         }
 
         .comparison-headers {
-            grid-area: headers;
+            /* grid-area: headers; */
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 40px;
@@ -226,7 +231,7 @@
         }
 
         .comparison-rows {
-            grid-area: rows;
+            /* grid-area: rows; */
             display: flex;
             flex-direction: column;
             gap: 40px;
@@ -292,6 +297,7 @@
             display: flex;
             gap: 20px;
             animation: scroll 40s linear infinite;
+						margin-top:20px;
         }
 
         .products-container:hover .cards-track {
@@ -307,8 +313,8 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
             transition: all 0.3s ease;
             overflow: hidden;
-            flex: 0 0 300px;
-            min-width: 300px;
+            flex: 0 0 400px;
+            min-width: 400px;
         }
 
         .product-card:hover {
@@ -376,9 +382,9 @@
         }
 
         .tools-grid {
-            display: grid;
+            /* display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 12px; */
         }
 
         .tool-item {
@@ -391,6 +397,8 @@
             text-align: center;
             border: 1px solid rgba(0, 0, 0, 0.05);
             transition: all 0.2s ease;
+						display:inline-block;
+						margin: 4px 2px;
         }
 
         .tool-item:hover {
@@ -943,11 +951,11 @@
 
             .comparison-content {
                 grid-template-columns: 1fr;
-                grid-template-areas: 
+                /* grid-template-areas: 
                     "text"
                     "visuals" 
                     "headers"
-                    "rows";
+                    "rows"; */
                 gap: 30px;
             }
 
