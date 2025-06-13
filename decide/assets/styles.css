@@ -427,8 +427,15 @@
         }
 
 				.features-container {
-            overflow: visible;
-            margin-bottom: 40px;
+            position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;         /* span the full viewport width */
+    overflow-x: hidden;   /* clip the extra grid, no scrollbar */
+    margin-bottom: 40px;
+    padding-inline-start: calc((100vw - 1400px) / 2);
         }
 
         .features-grid-2 {
@@ -436,7 +443,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             transition: transform 0.5s ease;
-            width: 142.86%; /* 100% / 0.7 to account for 70% visible width */
+            width: 120%; /* 100% / 0.7 to account for 70% visible width */
         }
 
         .features-grid-2.publisher-view {
@@ -567,8 +574,19 @@
 
 				/* START Better Tools */
 				.better-tools {
-            margin-top: 80px;
-            margin-bottom: 40px;
+            /* break out of the centred max-width container and fill the viewport */
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
+
+    /* and clip the overflow there */
+    overflow: hidden;
+
+    margin-top: 80px;
+    margin-bottom: 40px;
         }
 
         .better-tools h2 {
@@ -581,7 +599,7 @@
 
         .tools-row {
             display: flex;
-            overflow: visible;
+            overflow: hidden;
             margin-bottom: 30px;
             width: 100%;
         }
@@ -608,10 +626,10 @@
         .tool-card {
             background: white;
             border-radius: 20px;
-            padding: 40px 30px;
-            width: 280px;
+            padding: 70px;
+            width: 400px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            /* box-shadow: 0 8px 25px rgba(0,0,0,0.08); */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             flex-shrink: 0;
         }
@@ -682,7 +700,7 @@
         .contact-card {
             background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
             border-radius: 24px;
-            padding: 40px;
+            padding: 100px 80px;
             flex: 0 0 auto;
         }
 
@@ -699,13 +717,13 @@
             display: block;
         }
 
-        .contact-card h2 {
+        /* .contact-card h2 {
             font-size: 36px;
             font-weight: 700;
             color: #2d3748;
             margin-bottom: 20px;
             line-height: 1.2;
-        }
+        } */
 
         .contact-card p {
             font-size: 16px;
