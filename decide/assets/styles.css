@@ -60,7 +60,7 @@
         /* Revolution Section */
         .revolution-section {
             padding: 80px 40px;
-            max-width: 1200px;
+            max-width: 1480px;
             margin: 0 auto;
         }
 
@@ -150,10 +150,12 @@
         .comparison-section {
             padding: 80px 40px;
             background: rgba(255, 255, 255, 0.3);
+						margin: 0 auto;
         }
 
         .comparison-content {
-            max-width: 1400px;
+            max-width: 1480px;
+						padding: 80px 40px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -663,7 +665,7 @@
 
 				/* START Contact Section */
 				.contact-section {
-            max-width: 1200px;
+            max-width: 1480px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -726,7 +728,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-bottom: 24px;
+            /* margin-bottom: 24px; */
         }
 
         .form-group label {
