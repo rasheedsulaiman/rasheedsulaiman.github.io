@@ -647,7 +647,18 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
 
-        .tool-icon {
+        .hexagon {
+          width: 96px;
+          height: 100px;
+          background: url('./6s-polygon.svg') no-repeat center/cover;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom:50px;
+
+        }
+
+        /* .tool-icon {
             width: 60px;
             height: 60px;
             background: #1a1a1a;
@@ -656,7 +667,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
+        } */
 
         .tool-card h3 {
             font-size: 1.4rem;
