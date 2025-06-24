@@ -646,7 +646,7 @@
         .tool-card {
             background: white;
             border-radius: 20px;
-            padding: 70px;
+            padding: 50px;
             width: 400px;
             text-align: center;
             /* box-shadow: 0 8px 25px rgba(0,0,0,0.08); */
@@ -666,7 +666,6 @@
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          margin-bottom:50px;
 
         }
 
@@ -1131,5 +1130,8 @@
           background-image: url(./dot-matrix-transparent.png);
           border-radius: 150px;
           background-repeat: repeat;
-          margin: 0 auto;
+          margin: 0 auto 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
       }
