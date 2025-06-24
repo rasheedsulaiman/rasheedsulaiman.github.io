@@ -59,13 +59,14 @@
 
         /* Revolution Section */
         .revolution-section {
-            padding: 80px 40px;
-            max-width: 1480px;
-            margin: 0 auto;
+            background: #fff;
+            
         }
 
         .revolution-content {
-            margin-bottom: 80px;
+            padding: 80px 40px;
+            max-width: 1480px;
+            margin: 0 auto;
         }
 
         .revolution-header {
@@ -160,7 +161,7 @@
 
         /* Comparison Section */
         .comparison-section {
-            padding: 80px 40px;
+            /* padding: 80px 40px; */
             background: rgba(255, 255, 255, 0.3);
 						margin: 0 auto;
         }
@@ -420,9 +421,8 @@
 
 				/* START Platform Advertiser/Publisher */
 				.tabs {
-						display: flex
-				;
-						margin-bottom: 40px;
+						display: flex;
+						margin: 20px 0;
 						border-radius: 8px;
 						overflow: hidden;
 						width: fit-content;
@@ -447,15 +447,15 @@
         }
 
 				.features-container {
-            position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    width: 100vw;         /* span the full viewport width */
-    overflow-x: hidden;   /* clip the extra grid, no scrollbar */
-    margin-bottom: 40px;
-    padding-inline-start: calc((100vw - 1400px) / 2);
+          position: relative;
+          left: 50%;
+          right: 50%;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          width: 100vw;         /* span the full viewport width */
+          overflow-x: hidden;   /* clip the extra grid, no scrollbar */
+          /* margin-bottom: 40px; */
+          padding-inline-start: calc((100vw - 1400px) / 2);
         }
 
         .features-grid-2 {
@@ -463,7 +463,7 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             transition: transform 0.5s ease;
-            width: 120%; /* 100% / 0.7 to account for 70% visible width */
+            width: 100%; /* 100% / 0.7 to account for 70% visible width */
         }
 
         .features-grid-2.publisher-view {
@@ -484,7 +484,7 @@
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
-            min-height: 200px;
+            min-height: 260px;
         }
 
         .feature-block:hover {
@@ -493,7 +493,7 @@
         }
 
         .card-gradient {
-            width: 180px;
+            width: 220px;
             flex-shrink: 0;
             position: relative;
         }
@@ -595,18 +595,17 @@
 				/* START Better Tools */
 				.better-tools {
             /* break out of the centred max-width container and fill the viewport */
-    position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    width: 100vw;
+          position: relative;
+          left: 50%;
+          right: 50%;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          width: 100vw;
 
-    /* and clip the overflow there */
-    overflow: hidden;
-
-    margin-top: 80px;
-    margin-bottom: 40px;
+          /* and clip the overflow there */
+          overflow: hidden;
+          margin-top: 40px;
+          padding-bottom: 100px;
         }
 
         .better-tools h2 {
@@ -644,7 +643,7 @@
         }
 
         .tool-card {
-            background: white;
+            background: #F7F5F2;
             border-radius: 20px;
             padding: 50px;
             width: 400px;
@@ -712,13 +711,16 @@
 				/* END Better Tools */
 
 				/* START Contact Section */
-				.contact-section {
-            max-width: 1480px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: stretch;
+				.contact-content {
+          max-width: 1480px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          align-items: stretch;
+        }
+        .contact-section {
+            background: #fff;
         }
 				.left-column {
             display: flex;
@@ -765,7 +767,7 @@
         }
 
         .form-container {
-            background: white;
+            background: #F7F5F2;
             border-radius: 16px;
             padding: 40px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
