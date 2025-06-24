@@ -1123,3 +1123,12 @@
         }
 
         /* END Orbiting Styles */
+
+
+        .dot-matrix {
+          height: 225px;
+          width: 225px;
+          background-image: url(./dot-matrix-transparent.png);
+          border-radius: 150px;
+          background-repeat: repeat;
+      }
